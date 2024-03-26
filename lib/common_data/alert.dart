@@ -1,6 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 
+class OkAlert extends StatelessWidget {
+  String title;
+  String subtitle;
+  Function() okOnpressed;
+  OkAlert({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.okOnpressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            Text(
+              title,
+            ),
+            SizedBox(height: 15),
+            Text(
+              subtitle,
+            ),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: mainBlueColor),
+                      onPressed: okOnpressed,
+                      child: Container(
+                        child: PoppinsWhite14(
+                          text: "OK",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class YesNoAlert extends StatelessWidget {
   String title;
   String subtitle;

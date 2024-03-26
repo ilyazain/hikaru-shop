@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
@@ -52,7 +54,6 @@ class _ItemPageState extends State<ItemPage> {
               trailing: Text(widget.price),
             ),
             Text(widget.desc),
-            Text("data")
           ],
         ),
       ),
@@ -118,6 +119,17 @@ class _ItemPageState extends State<ItemPage> {
                         ),
                         MainBlueButton(
                           onPressed: () {
+                            SharedPreferences.getInstance().then((prefs) {
+                              List<String> cartItems =
+                                  prefs.getStringList('cart') ?? [];
+                              cartItems.add(json.encode({
+                                'item': widget.item,
+                                'image': widget.image,
+                                'price': widget.price,
+                                'quantity': quantity,
+                              }));
+                              prefs.setStringList('cart', cartItems);
+                            });
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -142,7 +154,7 @@ class _ItemPageState extends State<ItemPage> {
             );
           },
           title: const PoppinsWhite14(
-            text: "Add To Cart",
+            text: "Continue",
           ),
         ),
       ),

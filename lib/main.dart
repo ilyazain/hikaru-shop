@@ -6,12 +6,18 @@ import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/login.dart';
 import 'package:hikaru_e_shop/purchase/bloc_model/menu_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
   // runApp(const MyApp());
   runApp(
     MultiProvider(
-      providers: [BlocProvider(create: (context) => GetMenuBloc())],
+      providers: [
+        BlocProvider(create: (context) => GetMenuBloc()),
+        Provider.value(value: prefs),
+      ],
       child: MyApp(),
     ),
   );
