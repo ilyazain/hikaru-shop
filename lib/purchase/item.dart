@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
+import 'package:hikaru_e_shop/purchase/bloc_model/menu_model.dart';
 import 'package:hikaru_e_shop/purchase/cart.dart';
 import 'package:hikaru_e_shop/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemPage extends StatefulWidget {
   final String item;
@@ -22,10 +24,25 @@ class ItemPage extends StatefulWidget {
 }
 
 class _ItemPageState extends State<ItemPage> {
+  // List<MenuModel> items = [];
+
+  // void addItem(MenuModel menuModel) {
+  //   items.add(menuModel);
+  // }
+
+  // void removeItem(MenuModel menuModel) {
+  //   items.remove(menuModel);
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(text: "Item", appBar: AppBar(), onPressed: () {}),
+      appBar: MainAppBar(
+          text: "Item",
+          appBar: AppBar(),
+          onPressed: () {
+            Navigator.pop(context);
+          }),
       body: Container(
         child: Column(
           children: [
@@ -104,7 +121,12 @@ class _ItemPageState extends State<ItemPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CartPage(),
+                                builder: (context) => CartPage(
+                                  image: widget.image,
+                                  item: widget.item,
+                                  price: widget.price,
+                                  quantity: quantity,
+                                ),
                               ),
                             );
                           },

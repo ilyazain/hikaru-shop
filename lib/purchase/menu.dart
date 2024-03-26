@@ -105,32 +105,30 @@ class _MenuPageState extends State<MenuPage> {
                     (index) {
                       return GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ItemPage(
-                          //       image: listItem[index]['image'].toString(),
-                          //       item: listItem[index]['item'].toString(),
-                          //       price: listItem[index]['price'].toString(),
-                          //       desc: listItem[index]['description'].toString(),
-                          //     ),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ItemPage(
+                                image: data[index].thumbnail.toString(),
+                                item: data[index].title.toString(),
+                                price: data[index].price.toString(),
+                                desc: data[index].description.toString(),
+                              ),
+                            ),
+                          );
                         },
                         child: Card(
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Image.network(
-                                  data[index].thumbnail.toString(),
-                                  width: 100,
-                                  height: 100,
-                                ),
-                                Text(data[index].title.toString()),
-                                Text(data[index].description.toString()),
-                                Text(data[index].price.toString())
-                              ],
-                            ),
+                          child: Column(
+                            children: [
+                              Image.network(
+                                data[index].thumbnail.toString(),
+                                width: 100,
+                                height: 100,
+                              ),
+                              Text(data[index].title.toString()),
+                              Text(data[index].description.toString()),
+                              Text(data[index].price.toString())
+                            ],
                           ),
                         ),
                       );

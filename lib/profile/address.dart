@@ -16,7 +16,12 @@ class _AddressPageState extends State<AddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(text: "Address", appBar: AppBar(), onPressed: () {}),
+      appBar: MainAppBar(
+          text: "Address",
+          appBar: AppBar(),
+          onPressed: () {
+            Navigator.pop(context);
+          }),
       body: Container(
         child: Column(
           children: [
