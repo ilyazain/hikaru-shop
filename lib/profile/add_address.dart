@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/profile/address.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddAddressPage extends StatefulWidget {
   const AddAddressPage({super.key});
@@ -39,7 +42,24 @@ class _AddAddressPageState extends State<AddAddressPage> {
               //     builder: (context) => AddressPage(),
               //   ),
               // );
-              Navigator.pop(context);
+              SharedPreferences.getInstance().then((prefs) {
+                List<String> addressItems =
+                    prefs.getStringList('address') ?? [];
+                addressItems.add(json.encode({
+                  'add': addController.text,
+                  'city': cityController.text,
+                  'postcode': pCodeController.text,
+                  'state': stateController.text,
+                }));
+                prefs.setStringList('address', addressItems);
+              });
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddressPage(),
+                ),
+              );
             },
             title: PoppinsWhite14(
               text: "Confirm",

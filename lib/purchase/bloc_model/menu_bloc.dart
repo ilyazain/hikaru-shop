@@ -49,18 +49,13 @@ class GetMenuBloc extends Bloc<GetMenuEvent, GetMenuState> {
       final result = await mRepo.fetchProducts();
       final json = jsonDecode(result);
 
-      print("hehe result: " + result.toString());
-      print("hehe json: " + json.toString());
-
       // if (json["status"] == "success") {
       final output = MenuModel.fromJson(
         jsonDecode(result),
       );
-      print("hehe a");
       emit(
         SuccessfulGetMenu(output: output),
       );
-      print("hehe b");
       // } else {
       // final message = json["message"];
       // emit(

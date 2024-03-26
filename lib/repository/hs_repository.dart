@@ -7,7 +7,6 @@ class HikaShopRepository {
       Uri.parse('https://dummyjson.com/products'),
     );
     // List<dynamic> data = json.decode(response.body);
-    print("hehe fetch product: " + response.body.toString());
     return response.body;
   }
 
