@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/profile/add_address.dart';
+import 'package:hikaru_e_shop/purchase/cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({super.key});
@@ -13,6 +17,35 @@ class AddressPage extends StatefulWidget {
 
 class _AddressPageState extends State<AddressPage> {
   bool isChecked = false;
+  List<dynamic> addressItems = [];
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve cart items from SharedPreferences when the page loads
+    SharedPreferences.getInstance().then(
+      (prefs) {
+        setState(
+          () {
+            addressItems = prefs
+                    .getStringList('address')
+                    ?.map((item) => json.decode(item))
+                    .toList() ??
+                [];
+            // calculateTotalPrice();
+          },
+        );
+      },
+    );
+  }
+
+  void clearAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('address');
+    setState(() {
+      addressItems.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,11 +53,48 @@ class _AddressPageState extends State<AddressPage> {
           text: "Address",
           appBar: AppBar(),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CartPage(
+                    // image: widget.image,
+                    // item: widget.item,
+                    // price: widget.price,
+                    // quantity: quantity,
+                    ),
+              ),
+            );
           }),
       body: Container(
         child: Column(
           children: [
+            ElevatedButton(
+              onPressed: clearAddress,
+              child: Text("Clear Address"),
+            ),
+            Text("data"),
+            Expanded(
+              child: ListView.builder(
+                itemCount: addressItems.length,
+                itemBuilder: (context, index) {
+                  final item = addressItems[index];
+                  return Text(item['add'] +
+                      item['city'] +
+                      item['postcode'] +
+                      item['state']);
+
+                  // ListTile(
+                  //   leading: Image.network(item['image']),
+                  //   title: Text(item['item']),
+                  //   subtitle: Text(item['quantity'].toString()),
+                  //   trailing:
+                  //       // Text(item['price']),
+                  //       Text((item['quantity'] * int.parse(item['price']))
+                  //           .toString()),
+                  // );
+                },
+              ),
+            ),
             ListTile(
               leading: Text("Casa Subang Apartment"),
               trailing: IconButton(

@@ -10,16 +10,11 @@ import 'package:hikaru_e_shop/profile/address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartPage extends StatefulWidget {
-  final String item;
-  final String image;
-  final int quantity;
-  final String price;
-  const CartPage(
-      {super.key,
-      required this.item,
-      required this.image,
-      required this.quantity,
-      required this.price});
+  final String? item;
+  final String? image;
+  final int? quantity;
+  final String? price;
+  const CartPage({super.key, this.item, this.image, this.quantity, this.price});
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -71,6 +66,8 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
+        
+        haveBack: false,
         text: "Cart",
         appBar: AppBar(),
         onPressed: () {
