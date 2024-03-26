@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
+import 'package:hikaru_e_shop/common_data/constant.dart';
+import 'package:hikaru_e_shop/purchase/bloc_model/menu_bloc.dart';
 import 'package:hikaru_e_shop/purchase/item.dart';
+import 'package:provider/provider.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -60,62 +64,85 @@ class _MenuPageState extends State<MenuPage> {
       'price': "price6"
     },
   ];
+
+  @override
+  void initState() {
+    Provider.of<GetMenuBloc>(context, listen: false).add(
+      PostGetMenu(),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(text: "eShop", appBar: AppBar(), onPressed: () {}),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // ListTile(
-            //   leading: Text("IPhone 14"),
-            //   trailing: Text("RM40"),
-            // ),
-            // Text("lorem ipsum"),
-            Wrap(
-              children: List.generate(
-                listItem.length,
-                (index) {
-                  return Card(
-                    child: GestureDetector(
-                      onTap: () {
-                        print("hehe: " +
-                            listItem[index]['description'].toString());
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ItemPage(
-                              image: listItem[index]['image'].toString(),
-                              item: listItem[index]['item'].toString(),
-                              price: listItem[index]['price'].toString(),
-                              desc: listItem[index]['description'].toString(),
+      appBar: MainAppBar(
+          text: "eShop",
+          appBar: AppBar(),
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+      body: SingleChildScrollView(
+        child: BlocBuilder<GetMenuBloc, GetMenuState>(
+          builder: ((context, state) {
+            if (state is LoadingGetMenu) {
+              return Container(
+                // color: Colors.amber,
+                // height: MediaQuery.of(context).size.height,
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 200),
+                child: const CircularProgressIndicator(
+                    backgroundColor: mainBlueColor, color: whiteColor),
+              );
+            }
+            if (state is SuccessfulGetMenu) {
+              final data = state.output!.products!;
+              if (state.output?.products != null &&
+                  state.output!.products!.isNotEmpty) {
+                return Wrap(
+                  children: List.generate(
+                    state.output!.products!.length,
+                    (index) {
+                      return GestureDetector(
+                        onTap: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ItemPage(
+                          //       image: listItem[index]['image'].toString(),
+                          //       item: listItem[index]['item'].toString(),
+                          //       price: listItem[index]['price'].toString(),
+                          //       desc: listItem[index]['description'].toString(),
+                          //     ),
+                          //   ),
+                          // );
+                        },
+                        child: Card(
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Image.network(
+                                  data[index].thumbnail.toString(),
+                                  width: 100,
+                                  height: 100,
+                                ),
+                                Text(data[index].title.toString()),
+                                Text(data[index].description.toString()),
+                                Text(data[index].price.toString())
+                              ],
                             ),
                           ),
-                        );
-                      },
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Image.network(
-                              listItem[index]['image'],
-                              width: 100,
-                              height: 100,
-                            ),
-                            Text(listItem[index]["item"]),
-                            Text(listItem[index]["description"]),
-                            Text(listItem[index]["price"])
-                          ],
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ).toList(),
-            ),
-          ],
+                      );
+                    },
+                  ).toList(),
+                );
+              } else {
+                return Text('No products found');
+              }
+            }
+            return Container();
+          }),
         ),
       ),
     );

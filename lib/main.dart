@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/login.dart';
+import 'package:hikaru_e_shop/purchase/bloc_model/menu_bloc.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [BlocProvider(create: (context) => GetMenuBloc())],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,34 +22,38 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return YesNoAlert(
-              title: "Quit?",
-              subtitle: "Are you sure you want to quit the application?",
-              yesOnpressed: () {
-                SystemNavigator.pop();
-              },
+    return
+
+        // WillPopScope(
+        //   onWillPop: () async {
+        //     showDialog(
+        //       context: context,
+        //       barrierDismissible: false,
+        //       builder: (context) {
+        //         return YesNoAlert(
+        //           title: "Quit?",
+        //           subtitle: "Are you sure you want to quit the application?",
+        //           yesOnpressed: () {
+        //             SystemNavigator.pop();
+        //           },
+        //         );
+        //       },
+        //     );
+        //     return false;
+        //   },
+        //   child:
+
+        MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Hikaru Shop',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: mainBlueColor),
+              useMaterial3: true,
+            ),
+            home: const LoginPage()
+            // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+            // ),
             );
-          },
-        );
-        return false;
-      },
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Hikaru Shop',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: mainBlueColor),
-            useMaterial3: true,
-          ),
-          home: const LoginPage()
-          // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-          ),
-    );
   }
 }
 
