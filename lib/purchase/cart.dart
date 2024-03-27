@@ -27,7 +27,11 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
+    _loadCartItems();
     _loadSelectedAddress();
+  }
+
+  _loadCartItems() {
     // Retrieve cart items from SharedPreferences when the page loads
     SharedPreferences.getInstance().then(
       (prefs) {

@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/home.dart';
 import 'package:hikaru_e_shop/profile/address.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,10 +16,28 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Map<String, dynamic>? selectedAddress;
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedAddress();
+  }
+
+  Future<void> _loadSelectedAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? selectedAddressJson = prefs.getString('selectedaddress');
+    if (selectedAddressJson != null) {
+      setState(() {
+        selectedAddress = json.decode(selectedAddressJson);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
+          haveTrailing: true,
           text: "Profile",
           appBar: AppBar(),
           onPressed: () {
@@ -35,7 +56,11 @@ class _ProfilePageState extends State<ProfilePage> {
             //image profile
             Text("Ain Ilya Aqilah Zainodin"),
             ListTile(
-              leading: Text("Address"),
+              title: Text("Address"),
+              subtitle: selectedAddress != null
+                  ? Text(
+                      '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}')
+                  : Text('No address selected'),
               trailing: IconButton(
                 icon: Icon(Icons.arrow_forward_ios_sharp),
                 onPressed: () {
