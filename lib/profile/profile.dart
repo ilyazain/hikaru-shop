@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
+import 'package:hikaru_e_shop/home.dart';
 import 'package:hikaru_e_shop/profile/address.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,7 +16,19 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(text: "Profile", appBar: AppBar(), onPressed: () {}),
+      appBar: MainAppBar(
+          text: "Profile",
+          appBar: AppBar(),
+          onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => HomePage(
+            //       currentIndex: 2,
+            //     ),
+            //   ),
+            // );
+          }),
       body: Container(
         child: Column(
           children: [
@@ -29,7 +42,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddressPage(prePage: "fromProfile",),
+                      builder: (context) => AddressPage(
+                        prePage: "fromProfile",
+                      ),
                     ),
                   );
                 },

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
+import 'package:hikaru_e_shop/home.dart';
 import 'package:hikaru_e_shop/profile/add_address.dart';
 import 'package:hikaru_e_shop/purchase/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,13 +55,17 @@ class _AddressPageState extends State<AddressPage> {
           text: "Address",
           appBar: AppBar(),
           onPressed: () {
-            // Navigator.pop(context);
-            // Navigator.pushNamed(context, '/cart');
-
             if (widget.prePage == "fromCart") {
               Navigator.pushNamed(context, '/cart');
             } else if (widget.prePage == "fromProfile") {
-              Navigator.pushNamed(context, '/profile');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(
+                    currentIndex: 2,
+                  ),
+                ),
+              );
             } else {
               print("hehe");
             }

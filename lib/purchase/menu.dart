@@ -158,7 +158,11 @@ class _MenuPageState extends State<MenuPage> {
                   return Text('No products found');
                 }
               }
-              return Container();
+              return Container(
+                child: PoppinsBlack14(
+                  text: "Sorry, the server was down",
+                ),
+              );
             }),
           ),
         ),
