@@ -39,6 +39,7 @@ class _CartPageState extends State<CartPage> {
                     .toList() ??
                 [];
             calculateTotalPrice();
+            print("hehe init cartItems: " + cartItems.toString());
           },
         );
       },
@@ -112,50 +113,8 @@ class _CartPageState extends State<CartPage> {
           );
         },
       ),
-      body: Container(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: clearCart,
-              child: Text("Clear Cart"),
-            ),
-            _cartItem(),
-            MainBlueButton(
-              title: const PoppinsWhite14(
-                text: "Add more item",
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: Text("Address"),
-              subtitle: selectedAddress != null
-                  ? Text(
-                      '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}')
-                  : Text('No address selected'),
-              trailing: IconButton(
-                  onPressed: () {
-                    print("object");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddressPage(
-                          prePage: "fromCart",
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.arrow_forward_ios_outlined)),
-            )
-          ],
-        ),
-      ),
+      body:
+          Container(child: cartItems.isNotEmpty ? _cartFilled() : _cartEmpty()),
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(15),
         height: 200,
@@ -164,45 +123,70 @@ class _CartPageState extends State<CartPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ListTile(
-              leading: Text("Total"),
-              trailing: Text(totalPrice.toString()),
-            ),
+                leading: cartItems.isNotEmpty ? Text("Total") : null,
+                trailing:
+                    cartItems.isNotEmpty ? Text(totalPrice.toString()) : null),
             MainBlueButton(
               onPressed: () {
-                addToHistory();
-                // showDialog(
-                //   context: context,
-                //   barrierDismissible: false,
-                //   builder: (context) {
-                //     return OkAlert(
-                //       title: "Payment Success",
-                //       subtitle: "Thank you for buying with HikaShop",
-                //       okOnpressed: () {
-                //         clearCart();
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => HomePage(),
-                //           ),
-                //         );
-                //       },
-                //     );
-                //   },
-                // );
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => CartPage(),
-                //   ),
-                // );
+                cartItems.isNotEmpty
+                    ? addToHistory()
+                    : Navigator.pushNamed(context, '/home');
               },
-              title: const PoppinsWhite14(
-                text: "Confirm",
-              ),
+              title: PoppinsWhite14(
+                  text: cartItems.isNotEmpty ? "Confirm" : "Add Item"),
             )
           ],
         ),
       ),
+    );
+  }
+
+  _cartEmpty() {
+    return Column(
+      children: [
+        //add image
+        PoppinsBlack14(text: "Your cart is empty. Please add item")
+      ],
+    );
+  }
+
+  _cartFilled() {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: clearCart,
+          child: Text("Clear Cart"),
+        ),
+        _cartItem(),
+        MainBlueButton(
+          title: const PoppinsWhite14(
+            text: "Add more item",
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, '/home');
+          },
+        ),
+        ListTile(
+          title: Text("Address"),
+          subtitle: selectedAddress != null
+              ? Text(
+                  '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}')
+              : Text('No address selected'),
+          trailing: IconButton(
+              onPressed: () {
+                print("object");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddressPage(
+                      prePage: "fromCart",
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.arrow_forward_ios_outlined)),
+        )
+      ],
     );
   }
 
@@ -214,6 +198,7 @@ class _CartPageState extends State<CartPage> {
         itemCount: cartItems.length,
         itemBuilder: (context, index) {
           final item = cartItems[index];
+          print("hehe cartItems: " + cartItems.toString());
           return ListTile(
             leading: Image.network(item['image']),
             title: Text(item['item']),

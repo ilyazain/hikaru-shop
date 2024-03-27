@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
+import 'package:hikaru_e_shop/home.dart';
 import 'package:hikaru_e_shop/login.dart';
 import 'package:hikaru_e_shop/profile/profile.dart';
 import 'package:hikaru_e_shop/purchase/bloc_model/menu_bloc.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
           routes: {
     '/cart': (context) => CartPage(),
     '/profile': (context) => ProfilePage(),
+    '/home': (context) => HomePage(),
     // Other named routes...
   },
             debugShowCheckedModeBanner: false,
