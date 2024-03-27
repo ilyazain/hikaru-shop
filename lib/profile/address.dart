@@ -31,7 +31,7 @@ class _AddressPageState extends State<AddressPage> {
         setState(
           () {
             addressItems = prefs
-                    .getStringList('address')
+                  .getStringList('address')
                     ?.map((item) => json.decode(item))
                     .toList() ??
                 [];
@@ -72,10 +72,8 @@ class _AddressPageState extends State<AddressPage> {
                 itemBuilder: (context, index) {
                   final item = addressItems[index];
                   return ListTile(
-                    leading: Text(item['add'] +
-                        item['city'] +
-                        item['postcode'] +
-                        item['state']),
+                    leading: Text(
+                        '${item['add']}, ${item['city']}, ${item['postcode']},${item['state']}'),
                     trailing: IconButton(
                       icon: selectedAddress == index
                           ? Icon(Icons.check_box)
@@ -86,10 +84,6 @@ class _AddressPageState extends State<AddressPage> {
                           print(selectedAddress);
                         });
                         itemSelectedAddredd = item;
-                        // SharedPreferences prefs =
-                        //     await SharedPreferences.getInstance();
-                        // await prefs.setString(
-                        //     'selectedaddress', json.encode(item));
                       },
                     ),
                   );
