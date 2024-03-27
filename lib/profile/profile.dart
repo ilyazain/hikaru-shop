@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddressPage(),
+                      builder: (context) => AddressPage(prePage: "fromProfile",),
                     ),
                   );
                 },

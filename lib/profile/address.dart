@@ -9,7 +9,8 @@ import 'package:hikaru_e_shop/purchase/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddressPage extends StatefulWidget {
-  const AddressPage({super.key});
+  final String prePage;
+  const AddressPage({super.key, required this.prePage});
 
   @override
   State<AddressPage> createState() => _AddressPageState();
@@ -53,17 +54,27 @@ class _AddressPageState extends State<AddressPage> {
           text: "Address",
           appBar: AppBar(),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CartPage(
-                    // image: widget.image,
-                    // item: widget.item,
-                    // price: widget.price,
-                    // quantity: quantity,
-                    ),
-              ),
-            );
+            // Navigator.pop(context);
+            // Navigator.pushNamed(context, '/cart');
+
+            if (widget.prePage == "fromCart") {
+              Navigator.pushNamed(context, '/cart');
+            } else if (widget.prePage == "fromProfile") {
+              Navigator.pushNamed(context, '/profile');
+            } else {
+              print("hehe");
+            }
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => CartPage(
+            //         // image: widget.image,
+            //         // item: widget.item,
+            //         // price: widget.price,
+            //         // quantity: quantity,
+            //         ),
+            //   ),
+            // );
           }),
       body: Container(
         child: Column(
@@ -118,7 +129,7 @@ class _AddressPageState extends State<AddressPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddAddressPage(),
+                  builder: (context) => AddAddressPage(prePage: widget.prePage),
                 ),
               );
             },

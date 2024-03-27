@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/login.dart';
+import 'package:hikaru_e_shop/profile/profile.dart';
 import 'package:hikaru_e_shop/purchase/bloc_model/menu_bloc.dart';
+import 'package:hikaru_e_shop/purchase/cart.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,6 +52,11 @@ class MyApp extends StatelessWidget {
         //   child:
 
         MaterialApp(
+          routes: {
+    '/cart': (context) => CartPage(),
+    '/profile': (context) => ProfilePage(),
+    // Other named routes...
+  },
             debugShowCheckedModeBanner: false,
             title: 'Hikaru Shop',
             theme: ThemeData(

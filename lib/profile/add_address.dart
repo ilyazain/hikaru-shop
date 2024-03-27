@@ -8,7 +8,8 @@ import 'package:hikaru_e_shop/profile/address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddAddressPage extends StatefulWidget {
-  const AddAddressPage({super.key});
+  final String prePage;
+  const AddAddressPage({super.key, required this.prePage});
 
   @override
   State<AddAddressPage> createState() => _AddAddressPageState();
@@ -22,8 +23,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          MainAppBar(text: "Add Address", appBar: AppBar(), onPressed: () {}),
+      appBar: MainAppBar(
+          text: "Add Address",
+          appBar: AppBar(),
+          onPressed: () {
+            Navigator.pop(context);
+          }),
       body: Column(
         children: [
           _textField("Address", addController),
@@ -57,7 +62,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddressPage(),
+                  builder: (context) => AddressPage(
+                    prePage: widget.prePage,
+                  ),
                 ),
               );
             },

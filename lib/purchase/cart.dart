@@ -66,13 +66,16 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
-        
-        haveBack: false,
+        // haveBack: false,
         text: "Cart",
         appBar: AppBar(),
         onPressed: () {
-          Navigator.pop(context);
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
         },
       ),
       body: Container(
@@ -105,7 +108,7 @@ class _CartPageState extends State<CartPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddressPage(),
+                        builder: (context) => AddressPage(prePage: "fromCart",),
                       ),
                     );
                   },
