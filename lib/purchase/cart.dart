@@ -21,11 +21,13 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  Map<String, dynamic>? selectedAddress;
   int totalPrice = 0;
   List<dynamic> cartItems = [];
   @override
   void initState() {
     super.initState();
+    _loadSelectedAddress();
     // Retrieve cart items from SharedPreferences when the page loads
     SharedPreferences.getInstance().then(
       (prefs) {
@@ -41,6 +43,16 @@ class _CartPageState extends State<CartPage> {
         );
       },
     );
+  }
+
+  Future<void> _loadSelectedAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? selectedAddressJson = prefs.getString('selectedaddress');
+    if (selectedAddressJson != null) {
+      setState(() {
+        selectedAddress = json.decode(selectedAddressJson);
+      });
+    }
   }
 
   void addToHistory() async {
@@ -123,7 +135,10 @@ class _CartPageState extends State<CartPage> {
             ),
             ListTile(
               title: Text("Address"),
-              subtitle: Text("Casa Subang Apartment"),
+              subtitle: selectedAddress != null
+              ? Text(
+                  '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}')
+              : Text('No address selected'),
               trailing: IconButton(
                   onPressed: () {
                     print("object");

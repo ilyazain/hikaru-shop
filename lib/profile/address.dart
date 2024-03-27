@@ -20,6 +20,8 @@ class AddressPage extends StatefulWidget {
 class _AddressPageState extends State<AddressPage> {
   bool isChecked = false;
   List<dynamic> addressItems = [];
+  int selectedAddress = -1;
+  dynamic itemSelectedAddredd;
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,6 @@ class _AddressPageState extends State<AddressPage> {
                     ?.map((item) => json.decode(item))
                     .toList() ??
                 [];
-            // calculateTotalPrice();
           },
         );
       },
@@ -52,35 +53,12 @@ class _AddressPageState extends State<AddressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
-          text: "Address",
-          appBar: AppBar(),
-          onPressed: () {
-            if (widget.prePage == "fromCart") {
-              Navigator.pushNamed(context, '/cart');
-            } else if (widget.prePage == "fromProfile") {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(
-                    currentIndex: 2,
-                  ),
-                ),
-              );
-            } else {
-              print("hehe");
-            }
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => CartPage(
-            //         // image: widget.image,
-            //         // item: widget.item,
-            //         // price: widget.price,
-            //         // quantity: quantity,
-            //         ),
-            //   ),
-            // );
-          }),
+        text: "Address",
+        appBar: AppBar(),
+        onPressed: () {
+          _navigation();
+        },
+      ),
       body: Container(
         child: Column(
           children: [
@@ -88,60 +66,84 @@ class _AddressPageState extends State<AddressPage> {
               onPressed: clearAddress,
               child: Text("Clear Address"),
             ),
-            Text("data"),
             Expanded(
               child: ListView.builder(
                 itemCount: addressItems.length,
                 itemBuilder: (context, index) {
                   final item = addressItems[index];
-                  return Text(item['add'] +
-                      item['city'] +
-                      item['postcode'] +
-                      item['state']);
-
-                  // ListTile(
-                  //   leading: Image.network(item['image']),
-                  //   title: Text(item['item']),
-                  //   subtitle: Text(item['quantity'].toString()),
-                  //   trailing:
-                  //       // Text(item['price']),
-                  //       Text((item['quantity'] * int.parse(item['price']))
-                  //           .toString()),
-                  // );
+                  return ListTile(
+                    leading: Text(item['add'] +
+                        item['city'] +
+                        item['postcode'] +
+                        item['state']),
+                    trailing: IconButton(
+                      icon: selectedAddress == index
+                          ? Icon(Icons.check_box)
+                          : Icon(Icons.check_box_outline_blank),
+                      onPressed: () async {
+                        setState(() {
+                          selectedAddress = index;
+                          print(selectedAddress);
+                        });
+                        itemSelectedAddredd = item;
+                        // SharedPreferences prefs =
+                        //     await SharedPreferences.getInstance();
+                        // await prefs.setString(
+                        //     'selectedaddress', json.encode(item));
+                      },
+                    ),
+                  );
                 },
               ),
             ),
-            ListTile(
-              leading: Text("Casa Subang Apartment"),
-              trailing: IconButton(
-                icon: isChecked
-                    ? Icon(Icons.check_box)
-                    : Icon(Icons.check_box_outline_blank),
-                onPressed: () {
-                  setState(() {
-                    isChecked = !isChecked;
-                  });
+            MainBlueButton(
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.setString(
+                      'selectedaddress', json.encode(itemSelectedAddredd));
+
+                  _navigation();
                 },
-              ),
-            )
+                title: PoppinsWhite14(
+                  text: "Confirm Address",
+                ))
           ],
         ),
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(15),
         child: MainBlueButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddAddressPage(prePage: widget.prePage),
-                ),
-              );
-            },
-            title: PoppinsWhite14(
-              text: "Add Address",
-            )),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddAddressPage(prePage: widget.prePage),
+              ),
+            );
+          },
+          title: PoppinsWhite14(
+            text: "Add Address",
+          ),
+        ),
       ),
     );
+  }
+
+  _navigation() {
+    if (widget.prePage == "fromCart") {
+      Navigator.pushNamed(context, '/cart');
+    } else if (widget.prePage == "fromProfile") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(
+            currentIndex: 2,
+          ),
+        ),
+      );
+    } else {
+      print("hehe");
+    }
   }
 }
