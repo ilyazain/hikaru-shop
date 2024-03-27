@@ -43,6 +43,28 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  void addToHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<dynamic> historyItems = prefs
+            .getStringList('history')
+            ?.map((item) => json.decode(item))
+            .toList() ??
+        [];
+
+    // Add cart items to history
+    historyItems.addAll(cartItems);
+
+    // Save history items to SharedPreferences
+    prefs.setStringList(
+        'history', historyItems.map((item) => json.encode(item)).toList());
+    _alert();
+    // Navigate to HistoryPage
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => HistoryPage()),
+    // );
+  }
+
   void clearCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('cart');
@@ -108,7 +130,9 @@ class _CartPageState extends State<CartPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddressPage(prePage: "fromCart",),
+                        builder: (context) => AddressPage(
+                          prePage: "fromCart",
+                        ),
                       ),
                     );
                   },
@@ -130,25 +154,26 @@ class _CartPageState extends State<CartPage> {
             ),
             MainBlueButton(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) {
-                    return OkAlert(
-                      title: "Payment Success",
-                      subtitle: "Thank you for buying with HikaShop",
-                      okOnpressed: () {
-                        clearCart();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
+                addToHistory();
+                // showDialog(
+                //   context: context,
+                //   barrierDismissible: false,
+                //   builder: (context) {
+                //     return OkAlert(
+                //       title: "Payment Success",
+                //       subtitle: "Thank you for buying with HikaShop",
+                //       okOnpressed: () {
+                //         clearCart();
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => HomePage(),
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                // );
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(
@@ -192,5 +217,27 @@ class _CartPageState extends State<CartPage> {
     //   subtitle: Text(widget.quantity.toString()),
     //   trailing: Text(total.toString()),
     // );
+  }
+
+  _alert() {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return OkAlert(
+          title: "Thank you",
+          subtitle: "Thank you for buying with Hikaru Care",
+          okOnpressed: () {
+            clearCart();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
