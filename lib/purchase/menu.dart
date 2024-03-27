@@ -90,6 +90,7 @@ class _MenuPageState extends State<MenuPage> {
       },
       child: Scaffold(
         appBar: MainAppBar(
+            haveTrailing: true,
             text: "eShop",
             appBar: AppBar(),
             onPressed: () {

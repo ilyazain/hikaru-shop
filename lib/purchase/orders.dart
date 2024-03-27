@@ -39,7 +39,11 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(text: "Orders", appBar: AppBar(), onPressed: () {}),
+      appBar: MainAppBar(
+          haveTrailing: true,
+          text: "Orders",
+          appBar: AppBar(),
+          onPressed: () {}),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -5,12 +5,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String text;
   final AppBar appBar;
   final Function() onPressed;
-  final bool? haveBack;
+  final bool? haveLeading;
+  final bool? haveTrailing;
   const MainAppBar(
       {Key? key,
       required this.text,
       required this.appBar,
-      this.haveBack = true,
+      this.haveLeading = true,
+      this.haveTrailing = false,
       required this.onPressed})
       : super(key: key);
 
@@ -19,7 +21,23 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       centerTitle: true,
-      leading: haveBack == true
+      actions: [
+        haveTrailing == true
+            ? Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/cart');
+                  },
+                  icon: Icon(
+                    Icons.shopping_cart,
+                    color: whiteColor,
+                  ),
+                ),
+              )
+            : Container()
+      ],
+      leading: haveLeading == true
           ? IconButton(
               onPressed: onPressed,
               icon: const Icon(

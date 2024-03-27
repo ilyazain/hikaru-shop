@@ -100,7 +100,7 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
-        // haveBack: false,
+        // haveLeading: false,
         text: "Cart",
         appBar: AppBar(),
         onPressed: () {
@@ -136,9 +136,9 @@ class _CartPageState extends State<CartPage> {
             ListTile(
               title: Text("Address"),
               subtitle: selectedAddress != null
-              ? Text(
-                  '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}')
-              : Text('No address selected'),
+                  ? Text(
+                      '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}')
+                  : Text('No address selected'),
               trailing: IconButton(
                   onPressed: () {
                     print("object");

@@ -40,6 +40,7 @@ class _ItemPageState extends State<ItemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
+          haveTrailing: true,
           text: "Item",
           appBar: AppBar(),
           onPressed: () {
