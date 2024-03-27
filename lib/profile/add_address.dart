@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
@@ -47,25 +48,38 @@ class _AddAddressPageState extends State<AddAddressPage> {
               //     builder: (context) => AddressPage(),
               //   ),
               // );
-              SharedPreferences.getInstance().then((prefs) {
-                List<String> addressItems =
-                    prefs.getStringList('address') ?? [];
-                addressItems.add(json.encode({
-                  'add': addController.text,
-                  'city': cityController.text,
-                  'postcode': pCodeController.text,
-                  'state': stateController.text,
-                }));
-                prefs.setStringList('address', addressItems);
-              });
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddressPage(
-                    prePage: widget.prePage,
-                  ),
-                ),
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return OkAlert(
+                    title: "Address Add Successfully",
+                    subtitle: "Your address was successfully added",
+                    okOnpressed: () {
+                      SharedPreferences.getInstance().then((prefs) {
+                        List<String> addressItems =
+                            prefs.getStringList('address') ?? [];
+                        addressItems.add(json.encode({
+                          'add': addController.text,
+                          'city': cityController.text,
+                          'postcode': pCodeController.text,
+                          'state': stateController.text,
+                        }));
+                        prefs.setStringList('address', addressItems);
+                      });
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddressPage(
+                            prePage: widget.prePage,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               );
             },
             title: PoppinsWhite14(
