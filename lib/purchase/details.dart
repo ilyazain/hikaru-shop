@@ -12,8 +12,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          MainAppBar(text: "Order Details", appBar: AppBar(), onPressed: () {}),
+      appBar: MainAppBar(
+          text: "Order Details",
+          appBar: AppBar(),
+          onPressed: () {
+            Navigator.pop(context);
+          }),
       body: Container(
         child: Column(
           children: [
