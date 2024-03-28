@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  const OrderDetailPage({super.key});
+  final Map<String, dynamic> product;
+  const OrderDetailPage({super.key, required this.product});
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
+  List<String> selectedHistory = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +21,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             Navigator.pop(context);
           }),
       body: Container(
+        height: 600,
         child: Column(
           children: [
             _dateTime("Date", "23/23/23"),
@@ -27,21 +30,32 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             Text("Address"),
             Text("Casa Subang Apartment"),
             _divider(),
-            ListTile(
-              leading: Image.network(
-                "https://img.freepik.com/free-vector/sweet-eyed-kitten-cartoon-character_1308-135596.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1711324800&semt=ais",
-              ),
-              title: Text("Item"),
-              subtitle: Text("Qt2: 2"),
-              trailing: Text("RM 350"),
-            ),
+            _orderDetail(),
             _divider(),
             ListTile(
               leading: Text("Order Detail"),
-              trailing: Text("RM 450"),
+              trailing: Text(widget.product["totalPrice"].toString()),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  _orderDetail() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: widget.product["items"].length,
+        itemBuilder: (context, index) {
+          final item = widget.product["items"][index];
+          return ListTile(
+            leading: Image.network(item['image']),
+            title: Text(item['item']),
+            subtitle: Text(item['quantity'].toString()),
+            trailing:
+                Text((item['quantity'] * int.parse(item['price'])).toString()),
+          );
+        },
       ),
     );
   }

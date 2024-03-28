@@ -16,61 +16,12 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  List<dynamic> listItem = [
-    {
-      // 'image': "image1",
-      'image':
-          "https://img.freepik.com/free-vector/sweet-eyed-kitten-cartoon-character_1308-135596.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1711324800&semt=ais",
-      'item': "item1",
-      'description': "desc1",
-      'price': "price1"
-    },
-    {
-      // 'image': "image2",
-      'image':
-          "https://img.freepik.com/free-vector/sweet-eyed-kitten-cartoon-character_1308-135596.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1711324800&semt=ais",
-      'item': "item2",
-      'description': "desc2",
-      'price': "price2"
-    },
-    {
-      // 'image': "image3",
-      'image':
-          "https://img.freepik.com/free-vector/sweet-eyed-kitten-cartoon-character_1308-135596.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1711324800&semt=ais",
-      'item': "item3",
-      'description': "desc3",
-      'price': "price3"
-    },
-    {
-      // 'image': "image4",
-      'image':
-          "https://img.freepik.com/free-vector/sweet-eyed-kitten-cartoon-character_1308-135596.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1711324800&semt=ais",
-      'item': "item4",
-      'description': "desc4",
-      'price': "price4"
-    },
-    {
-      // 'image': "image5",
-      'image':
-          "https://img.freepik.com/free-vector/sweet-eyed-kitten-cartoon-character_1308-135596.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1711324800&semt=ais",
-      'item': "item5",
-      'description': "desc5",
-      'price': "price5"
-    },
-    {
-      // 'image': "image6",
-      'image':
-          "https://img.freepik.com/free-vector/sweet-eyed-kitten-cartoon-character_1308-135596.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1711324800&semt=ais",
-      'item': "item6",
-      'description': "desc6",
-      'price': "price6"
-    },
-  ];
 
   @override
   void initState() {
     Provider.of<GetMenuBloc>(context, listen: false).add(
       PostGetMenu(),
+      
     );
     super.initState();
   }
@@ -119,41 +70,93 @@ class _MenuPageState extends State<MenuPage> {
                 final data = state.output!.products!;
                 if (state.output?.products != null &&
                     state.output!.products!.isNotEmpty) {
-                  return Wrap(
-                    children: List.generate(
-                      state.output!.products!.length,
-                      (index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ItemPage(
-                                  image: data[index].thumbnail.toString(),
-                                  item: data[index].title.toString(),
-                                  price: data[index].price.toString(),
-                                  desc: data[index].description.toString(),
+                  return Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius:
+                            BorderRadius.circular(10),
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          color: Colors.blue,
+                          child: Center(
+                            child: Text(
+                              'ClipRRect',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Wrap(
+                        children: List.generate(
+                          state.output!.products!.length,
+                          (index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ItemPage(
+                                      image: data[index].thumbnail.toString(),
+                                      item: data[index].title.toString(),
+                                      price: data[index].price.toString(),
+                                      desc: data[index].description.toString(),
+                                      images: data[index].images! ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                // margin: EdgeInsets.all(5),
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: 300,
+                                child: Card(
+                                  child: Column(
+                                    children: [
+                                      Image.network(
+                                        data[index].thumbnail.toString(),
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 3,
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              // color: Colors.red,
+                                              child: Text(
+                                                data[index].title.toString(),
+                                              ),
+                                            ),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: Container(
+                                              alignment: Alignment.centerRight,
+                                              // color: Colors.blue,
+                                              child: Text(
+                                                data[index].price.toString(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        data[index].description.toString(),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
                           },
-                          child: Card(
-                            child: Column(
-                              children: [
-                                Image.network(
-                                  data[index].thumbnail.toString(),
-                                  width: 100,
-                                  height: 100,
-                                ),
-                                Text(data[index].title.toString()),
-                                Text(data[index].description.toString()),
-                                Text(data[index].price.toString())
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ).toList(),
+                        ).toList(),
+                      ),
+                    ],
                   );
                 } else {
                   return Text('No products found');

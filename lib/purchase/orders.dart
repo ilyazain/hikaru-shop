@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/purchase/details.dart';
@@ -51,50 +50,39 @@ class _OrdersPageState extends State<OrdersPage> {
               onPressed: clearHistory,
               child: Text("Clear History"),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderDetailPage(),
-                  ),
-                );
-              },
-              child: Container(
-                height: 300,
-                child: ListView.builder(
-                  itemCount: historyItems.length,
-                  itemBuilder: (context, index) {
-                    final items = historyItems[index];
-                    // Check if 'item', 'quantity', and 'price' are not null before accessing them
-                    final itemText = items['item'] ?? 'Unknown Item';
-                    final quantityText = items['quantity'] != null
-                        ? 'Quantity: ${items['quantity']}'
-                        : 'Unknown Quantity';
-                    final priceText = items['price'] != null
-                        ? 'Price: ${items['price']}'
-                        : 'Unknown Price';
-                    return ListTile(
-                      title: Text(itemText),
-                      subtitle: Text('$quantityText, $priceText'),
-                    );
-                  },
+            Container(height: 300, child: _order()
                 ),
-
-                // Column(children: [
-                //   ListTile(
-                //     title: Text("data"),
-                //     subtitle: Text("data"),
-                //     trailing: Column(
-                //       children: [Text("data"), Text("data")],
-                //     ),
-                //   )
-                // ]),
-              ),
-            ),
           ],
         ),
       ),
+    );
+  }
+
+  _order() {
+    return ListView.builder(
+      itemCount: historyItems.length,
+      itemBuilder: (context, index) {
+        final product = json.decode(historyItems[index]);final itemName =
+            product['items'].map((e) => e['item']).join(', ') ?? 'Unknown Item';
+        final itemTotalPrice = product['totalPrice'] ?? 'Unknown Item';
+        return GestureDetector(
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OrderDetailPage(product: product,),
+              ),
+            );
+          },
+          child: ListTile(
+            title: Text(itemTotalPrice.toString()),
+            subtitle: Text(itemName),
+            trailing: Column(
+                children: [Text(itemTotalPrice.toString()), Text("data")]),
+            // subtitle: Text('$quantityText, $priceText'),
+          ),
+        );
+      },
     );
   }
 }

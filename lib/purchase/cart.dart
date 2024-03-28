@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
@@ -32,7 +31,6 @@ class _CartPageState extends State<CartPage> {
   }
 
   _loadCartItems() {
-    // Retrieve cart items from SharedPreferences when the page loads
     SharedPreferences.getInstance().then(
       (prefs) {
         setState(
@@ -43,7 +41,6 @@ class _CartPageState extends State<CartPage> {
                     .toList() ??
                 [];
             calculateTotalPrice();
-            print("hehe init cartItems: " + cartItems.toString());
           },
         );
       },
@@ -68,18 +65,21 @@ class _CartPageState extends State<CartPage> {
             .toList() ??
         [];
 
+    OrderDetail orderDetail = OrderDetail(
+      id: historyItems.length + 1,
+      items: cartItems,
+      totalPrice: totalPrice,
+      // dateTime: DateTime.now()
+    );
+    String jsonStr = jsonEncode(orderDetail);
+
     // Add cart items to history
-    historyItems.addAll(cartItems);
+    historyItems.add(jsonStr);
 
     // Save history items to SharedPreferences
     prefs.setStringList(
         'history', historyItems.map((item) => json.encode(item)).toList());
     _alert();
-    // Navigate to HistoryPage
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => HistoryPage()),
-    // );
   }
 
   void clearCart() async {
@@ -146,7 +146,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   _cartEmpty() {
-    return Column(
+    return const Column(
       children: [
         //add image
         PoppinsBlack14(text: "Your cart is empty. Please add item")
@@ -195,14 +195,11 @@ class _CartPageState extends State<CartPage> {
   }
 
   _cartItem() {
-    // final total = widget.quantity * int.parse(widget.price);
-    // totalPrice = total.toString();
     return Expanded(
       child: ListView.builder(
         itemCount: cartItems.length,
         itemBuilder: (context, index) {
           final item = cartItems[index];
-          print("hehe cartItems: " + cartItems.toString());
           return ListTile(
             leading: Image.network(item['image']),
             title: Text(item['item']),
@@ -214,13 +211,6 @@ class _CartPageState extends State<CartPage> {
         },
       ),
     );
-
-    // ListTile(
-    //   leading: Image.network(widget.image),
-    //   title: Text(widget.item),
-    //   subtitle: Text(widget.quantity.toString()),
-    //   trailing: Text(total.toString()),
-    // );
   }
 
   _alert() {
@@ -243,5 +233,30 @@ class _CartPageState extends State<CartPage> {
         );
       },
     );
+  }
+}
+
+// Define a class for the object
+class OrderDetail {
+  final int id;
+  final List<dynamic> items;
+  final int totalPrice;
+  // final DateTime dateTime;
+
+  OrderDetail({
+    required this.id,
+    required this.items,
+    required this.totalPrice,
+    // required this.dateTime
+  });
+
+  // Convert OrderDetail instance to a JSON-encodable map
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'items': items,
+      'totalPrice': totalPrice,
+      // 'dateTime': dateTime
+    };
   }
 }
