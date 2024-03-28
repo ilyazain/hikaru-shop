@@ -42,11 +42,24 @@ class _AddressPageState extends State<AddressPage> {
   }
 
   void clearAddress() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('address');
-    setState(() {
-      addressItems.clear();
-    });
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return YesNoAlert(
+          title: "Delete All Address?",
+          subtitle: "Are you sure you want to delete all address?",
+          yesOnpressed: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.remove('address');
+            setState(() {
+              addressItems.clear();
+            });
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -89,11 +102,28 @@ class _AddressPageState extends State<AddressPage> {
   _haveAddress() {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: clearAddress,
-          child: Text("Clear Address"),
+        const SizedBox(
+          height: 10,
         ),
         _addressList(),
+        SizedBox(
+          width: 170,
+          child: ElevatedButton(
+            onPressed: clearAddress,
+            child: const Row(
+              children: [
+                Icon(
+                  Icons.delete,
+                  color: redColor,
+                ),
+                TextMaroon12(text: "Clear All Address"),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: MainBlueButton(
@@ -134,11 +164,26 @@ class _AddressPageState extends State<AddressPage> {
   }
 
   _addressEmpty() {
-    return const Column(
-      children: [
-        //add image
-        TextBlack14(text: "Your address is empty. Please add item")
-      ],
+    return Container(
+      margin: EdgeInsets.all(15),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 30, bottom: 10, top: 120),
+            child: Image.asset(
+              "assets/shy_girl2.png",
+              height: 200,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: const Center(
+              child: TextBlack16(
+                  text: "Your address is empty. Please add address"),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -150,12 +195,16 @@ class _AddressPageState extends State<AddressPage> {
           final item = addressItems[index];
           return ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: TextBlack14(
-                  text:
-                      '${item['add']}, ${item['city']}, ${item['postcode']},${item['state']}'),
+            leading: Container(
+              // color: Colors.amber,
+              child: Image.asset(
+                "assets/address.png",
+                width: 60,
+              ),
             ),
+            title: TextBlack14(
+                text:
+                    '${item['add']}, ${item['city']}, ${item['postcode']},${item['state']}'),
             trailing: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,

@@ -104,6 +104,21 @@ class TextMaroon12 extends StatelessWidget {
   }
 }
 
+class TextMaroon18 extends StatelessWidget {
+  final String text;
+
+  const TextMaroon18({Key? key, required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+          color: redColor, fontSize: 18, fontWeight: FontWeight.bold),
+    );
+  }
+}
+
 class TextGrey14 extends StatelessWidget {
   final String text;
 
@@ -132,6 +147,7 @@ class TextBlack16 extends StatelessWidget {
       text,
       style: const TextStyle(
           color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+      textAlign: TextAlign.center,
     );
   }
 }

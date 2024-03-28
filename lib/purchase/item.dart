@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
-import 'package:hikaru_e_shop/purchase/bloc_model/product_model.dart';
 import 'package:hikaru_e_shop/purchase/cart.dart';
-import 'package:hikaru_e_shop/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemPage extends StatefulWidget {
@@ -31,6 +29,7 @@ class _ItemPageState extends State<ItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: greyShade300Color,
       appBar: MainAppBar(
           haveTrailing: true,
           text: "Item",
@@ -41,19 +40,20 @@ class _ItemPageState extends State<ItemPage> {
       body: Container(
         child: Column(
           children: [
-            // Image.network(widget.image),
             _slideImage(),
-            //       ListView.builder(
-            //   itemCount: product.images.length,
-            //   itemBuilder: (context, index) {
-            //     return Image.network(product.images[index]);
-            //   },
-            // );
             ListTile(
-              leading: Text(widget.item),
-              trailing: Text(widget.price),
+              title: TextBlack18(text: widget.item),
+              subtitle: TextMaroon18(text: "RM " + widget.price),
             ),
-            Text(widget.desc),
+            Container(
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              padding: const EdgeInsets.all(15),
+              margin: EdgeInsets.all(10),
+              child: TextBlack14(text: widget.desc),
+            ),
           ],
         ),
       ),
@@ -68,28 +68,35 @@ class _ItemPageState extends State<ItemPage> {
                 return StatefulBuilder(
                     builder: (BuildContext context, StateSetter setState) {
                   return Container(
+                    margin: EdgeInsets.all(15),
+                    padding: EdgeInsets.all(10),
                     height: 200,
                     width: double.infinity,
-                    color: Colors.white,
                     child: Column(
                       children: [
                         Row(
                           mainAxisSize: MainAxisSize.min,
+                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Image.network(
                               widget.image,
-                              scale: 8,
-                              // width: 10,
-                              // height: 10,
+                              width: 100,
+                              height: 100,
+                            ),
+                            SizedBox(
+                              width: 20,
                             ),
                             Column(
                               children: [
-                                Text(widget.item),
+                                TextBlack14(text: widget.item),
                                 Row(
                                   children: [
-                                    Text("Quantity"),
+                                    TextBlack14(text: "Quantity"),
                                     IconButton(
-                                      icon: Icon(Icons.remove),
+                                      icon: Icon(
+                                        Icons.remove,
+                                        color: blackColor,
+                                      ),
                                       onPressed: () {
                                         setState(
                                           () {
@@ -102,7 +109,10 @@ class _ItemPageState extends State<ItemPage> {
                                     ),
                                     Text("$quantity"),
                                     IconButton(
-                                      icon: Icon(Icons.add),
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: blackColor,
+                                      ),
                                       onPressed: () {
                                         setState(
                                           () {
@@ -116,6 +126,9 @@ class _ItemPageState extends State<ItemPage> {
                               ],
                             )
                           ],
+                        ),
+                        SizedBox(
+                          height: 20,
                         ),
                         MainBlueButton(
                           onPressed: () {
@@ -162,31 +175,27 @@ class _ItemPageState extends State<ItemPage> {
   }
 
   _slideImage() {
-    return SizedBox(
-      height: 250,
-      width: double.infinity,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: widget.images.length,
-        separatorBuilder: (BuildContext context, int index) {
-          // Return a SizedBox with a specified width as a separator
-          return Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              width: 5,
-              color: greyShade400Color);
-        },
-        itemBuilder: (context, index) {
-          return Image.network(widget.images[index]);
-        },
-      ),
-
-      // ListView.builder(
-      //   scrollDirection: Axis.horizontal,
-      //   itemCount: widget.images.length,
-      //   itemBuilder: (context, index) {
-      //     return Image.network(widget.images[index]);
-      //   },
-      // ),
-    );
+    if (widget.images.isEmpty) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return Container(
+        padding: EdgeInsets.all(10),
+        height: 250,
+        width: double.infinity,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: widget.images.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: 3,
+                color: greyShade400Color);
+          },
+          itemBuilder: (context, index) {
+            return Image.network(widget.images[index]);
+          },
+        ),
+      );
+    }
   }
 }

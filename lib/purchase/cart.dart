@@ -23,6 +23,8 @@ class _CartPageState extends State<CartPage> {
   Map<String, dynamic>? selectedAddress;
   int totalPrice = 0;
   List<dynamic> cartItems = [];
+  int selectedCart = -1;
+  dynamic itemSelectedCart;
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,11 @@ class _CartPageState extends State<CartPage> {
           () {
             cartItems = prefs
                     .getStringList('cart')
-                    ?.map((item) => json.decode(item))
+                    ?.map(
+                      (item) => json.decode(
+                        item,
+                      ),
+                    )
                     .toList() ??
                 [];
             calculateTotalPrice();
@@ -126,10 +132,16 @@ class _CartPageState extends State<CartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            cartItems.isNotEmpty
+                ? ElevatedButton(
+                    onPressed: clearCart,
+                    child: Text("Clear Cart"),
+                  )
+                : Container(),
             ListTile(
-                leading: cartItems.isNotEmpty ? Text("Total") : null,
-                trailing:
-                    cartItems.isNotEmpty ? Text(totalPrice.toString()) : null),
+                leading:
+                    cartItems.isNotEmpty ? TextBlack14(text: "Total") : null,
+                trailing: _getTotalPrice()),
             MainBlueButton(
               onPressed: () {
                 cartItems.isNotEmpty
@@ -145,15 +157,21 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  _getTotalPrice() {
+    _updateCartList();
+    calculateTotalPrice();
+    return cartItems.isNotEmpty
+        ? TextBlack14(text: "RM " + totalPrice.toString())
+        : null;
+  }
+
   _cartEmpty() {
     return Container(
       margin: EdgeInsets.all(15),
-      // height: double.infinity,
-      // color: mainBlueColor,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 30, bottom: 10, top: 120),
+            padding: const EdgeInsets.only(right: 30, bottom: 10, top: 130),
             child: Image.asset(
               "assets/shy_girl2.png",
               height: 200,
@@ -174,13 +192,15 @@ class _CartPageState extends State<CartPage> {
   _cartFilled() {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: clearCart,
-          child: Text("Clear Cart"),
+        Expanded(
+          child: _cartItem(),
         ),
-        _cartItem(),
-        MainBlueButton(
-          title: const TextWhite14(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: orangeShade300Color,
+            foregroundColor: Colors.white,
+          ),
+          child: const TextWhite14(
             text: "Add more item",
           ),
           onPressed: () {
@@ -212,22 +232,73 @@ class _CartPageState extends State<CartPage> {
   }
 
   _cartItem() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: cartItems.length,
-        itemBuilder: (context, index) {
-          final item = cartItems[index];
-          return ListTile(
-            leading: Image.network(item['image']),
-            title: Text(item['item']),
-            subtitle: Text(item['quantity'].toString()),
-            trailing:
-                // Text(item['price']),
-                Text((item['quantity'] * int.parse(item['price'])).toString()),
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: cartItems.length,
+      itemBuilder: (context, index) {
+        final item = cartItems[index];
+        return ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Image.network(
+              item['image'],
+              width: 80,
+            ),
+          ),
+          title: TextBlack14(text: item['item']),
+          subtitle: TextGrey14(text: item['quantity'].toString()),
+          trailing: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextBlack14(
+                  text: ("RM " +
+                      (item['quantity'] * int.parse(item['price']))
+                          .toString())),
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  color: redColor,
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return YesNoAlert(
+                        title: "Delete item?",
+                        subtitle:
+                            "Are you sure you want to delete ${item['item']} in cart?",
+                        yesOnpressed: () {
+                          setState(() {
+                            cartItems.removeAt(index);
+                            if (selectedCart == index) {
+                              selectedCart = -1;
+                              itemSelectedCart = null;
+                            }
+                          });
+                          _updateCartList();
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
+  }
+
+  void _updateCartList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> cartJsonList =
+        cartItems.map((item) => json.encode(item)).toList();
+    prefs.setStringList('cart', cartJsonList);
+
+    // totalPrice = calculateTotalPrice();
   }
 
   _alert() {
