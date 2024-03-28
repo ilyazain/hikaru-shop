@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/login.dart';
 import 'package:hikaru_e_shop/profile/profile.dart';
-import 'package:hikaru_e_shop/purchase/menu.dart';
+import 'package:hikaru_e_shop/purchase/product.dart';
 import 'package:hikaru_e_shop/purchase/orders.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   List<BottomNavigationBarItem> bottomBar = [
     const BottomNavigationBarItem(
       icon: Icon(Icons.menu_book),
-      label: 'Menu',
+      label: 'Product',
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.list_alt),
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         children: const [
-          MenuPage(),
+          ProductPage(),
           OrdersPage(),
           ProfilePage(),
         ],

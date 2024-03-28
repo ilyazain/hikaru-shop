@@ -9,14 +9,14 @@ import 'package:hikaru_e_shop/purchase/bloc_model/product_model.dart';
 import 'package:hikaru_e_shop/purchase/item.dart';
 import 'package:provider/provider.dart';
 
-class MenuPage extends StatefulWidget {
-  const MenuPage({super.key});
+class ProductPage extends StatefulWidget {
+  const ProductPage({super.key});
 
   @override
-  State<MenuPage> createState() => _MenuPageState();
+  State<ProductPage> createState() => _ProductPageState();
 }
 
-class _MenuPageState extends State<MenuPage> {
+class _ProductPageState extends State<ProductPage> {
   int stateLength = 0;
   List<Products> stateData = [];
   @override
