@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
-import 'package:hikaru_e_shop/purchase/bloc_model/menu_model.dart';
+import 'package:hikaru_e_shop/purchase/bloc_model/product_model.dart';
 import 'package:hikaru_e_shop/purchase/cart.dart';
 import 'package:hikaru_e_shop/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';

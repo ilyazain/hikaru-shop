@@ -1,12 +1,12 @@
-class MenuModel {
+class ProductModel {
   List<Products>? products;
   int? total;
   int? skip;
   int? limit;
 
-  MenuModel({this.products, this.total, this.skip, this.limit});
+  ProductModel({this.products, this.total, this.skip, this.limit});
 
-  MenuModel.fromJson(Map<String, dynamic> json) {
+  ProductModel.fromJson(Map<String, dynamic> json) {
     if (json['products'] != null) {
       products = <Products>[];
       json['products'].forEach((v) {

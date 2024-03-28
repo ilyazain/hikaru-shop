@@ -6,7 +6,7 @@ import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/home.dart';
 import 'package:hikaru_e_shop/login.dart';
 import 'package:hikaru_e_shop/profile/profile.dart';
-import 'package:hikaru_e_shop/purchase/bloc_model/menu_bloc.dart';
+import 'package:hikaru_e_shop/purchase/bloc_model/product_bloc.dart';
 import 'package:hikaru_e_shop/purchase/cart.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +18,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        BlocProvider(create: (context) => GetMenuBloc()),
+        BlocProvider(create: (context) => GetProductBloc()),
         Provider.value(value: prefs),
       ],
       child: MyApp(),

@@ -4,7 +4,8 @@ import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/login.dart';
-import 'package:hikaru_e_shop/purchase/bloc_model/menu_bloc.dart';
+import 'package:hikaru_e_shop/purchase/bloc_model/product_bloc.dart';
+import 'package:hikaru_e_shop/purchase/bloc_model/product_model.dart';
 import 'package:hikaru_e_shop/purchase/item.dart';
 import 'package:provider/provider.dart';
 
@@ -16,12 +17,12 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-
+  int stateLength = 0;
+  List<Products> stateData = [];
   @override
   void initState() {
-    Provider.of<GetMenuBloc>(context, listen: false).add(
-      PostGetMenu(),
-      
+    Provider.of<GetProductBloc>(context, listen: false).add(
+      PostGetAllProduct(),
     );
     super.initState();
   }
@@ -54,120 +55,206 @@ class _MenuPageState extends State<MenuPage> {
               );
             }),
         body: SingleChildScrollView(
-          child: BlocBuilder<GetMenuBloc, GetMenuState>(
-            builder: ((context, state) {
-              if (state is LoadingGetMenu) {
-                return Container(
-                  // color: Colors.amber,
-                  // height: MediaQuery.of(context).size.height,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 200),
-                  child: const CircularProgressIndicator(
-                      backgroundColor: mainBlueColor, color: whiteColor),
-                );
-              }
-              if (state is SuccessfulGetMenu) {
-                final data = state.output!.products!;
-                if (state.output?.products != null &&
-                    state.output!.products!.isNotEmpty) {
-                  return Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(10),
-                        child: Container(
+          child: Column(
+            children: [
+              BlocBuilder<GetProductBloc, GetProductState>(
+                builder: ((context, state) {
+                  if (state is LoadingGetProduct) {
+                    return Container(
+                      // color: Colors.amber,
+                      // height: MediaQuery.of(context).size.height,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top: 200),
+                      child: const CircularProgressIndicator(
+                          backgroundColor: mainBlueColor, color: whiteColor),
+                    );
+                  }
+                  if (state is SuccessfulGetAllProduct) {
+                    final data = state.output!.products!;
+                    stateData = data;
+                    if (state.output?.products != null &&
+                        state.output!.products!.isNotEmpty) {
+                      stateLength = state.output!.products!.length;
+                      return _productCard(stateLength, stateData);
+                    } else {
+                      return Text('No products found');
+                    }
+                  }
+                  if (state is SuccessfulGetCategoryProduct) {
+                    final data = state.output!.products!;
+                    stateData = data;
+                    if (state.output?.products != null &&
+                        state.output!.products!.isNotEmpty) {
+                      stateLength = state.output!.products!.length;
+                      return _productCard(stateLength, stateData);
+                    } else {
+                      return Column(
+                        children: [
+                          _allFilterButton(),
+                          Text('No products found'),
+                        ],
+                      );
+                    }
+                  }
+                  return Container(
+                    child: PoppinsBlack14(
+                      text: "Sorry, the server was down",
+                    ),
+                  );
+                }),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _productCard(stateLength, stateData) {
+    return Column(
+      children: [
+        _allFilterButton(),
+        Wrap(
+          children: List.generate(
+            stateLength,
+            (index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemPage(
+                          image: stateData[index].thumbnail.toString(),
+                          item: stateData[index].title.toString(),
+                          price: stateData[index].price.toString(),
+                          desc: stateData[index].description.toString(),
+                          images: stateData[index].images!),
+                    ),
+                  );
+                },
+                child: Container(
+                  // margin: EdgeInsets.all(5),
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: 300,
+                  child: Card(
+                    child: Column(
+                      children: [
+                        Image.network(
+                          stateData[index].thumbnail.toString(),
                           width: 100,
-                          height: 30,
-                          color: Colors.blue,
-                          child: Center(
-                            child: Text(
-                              'ClipRRect',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                          height: 100,
                         ),
-                      ),
-                      Wrap(
-                        children: List.generate(
-                          state.output!.products!.length,
-                          (index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ItemPage(
-                                      image: data[index].thumbnail.toString(),
-                                      item: data[index].title.toString(),
-                                      price: data[index].price.toString(),
-                                      desc: data[index].description.toString(),
-                                      images: data[index].images! ),
-                                  ),
-                                );
-                              },
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 3,
                               child: Container(
-                                // margin: EdgeInsets.all(5),
-                                width: MediaQuery.of(context).size.width / 2,
-                                height: 300,
-                                child: Card(
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                        data[index].thumbnail.toString(),
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Flexible(
-                                            flex: 3,
-                                            child: Container(
-                                              alignment: Alignment.centerLeft,
-                                              // color: Colors.red,
-                                              child: Text(
-                                                data[index].title.toString(),
-                                              ),
-                                            ),
-                                          ),
-                                          Flexible(
-                                            flex: 1,
-                                            child: Container(
-                                              alignment: Alignment.centerRight,
-                                              // color: Colors.blue,
-                                              child: Text(
-                                                data[index].price.toString(),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        data[index].description.toString(),
-                                      ),
-                                    ],
-                                  ),
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  stateData[index].title.toString(),
                                 ),
                               ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ],
-                  );
-                } else {
-                  return Text('No products found');
-                }
-              }
-              return Container(
-                child: PoppinsBlack14(
-                  text: "Sorry, the server was down",
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  stateData[index].price.toString(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          stateData[index].description.toString(),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
-            }),
+            },
+          ).toList(),
+        ),
+      ],
+    );
+  }
+
+  _allFilterButton() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _filterButton(
+            "All",
+            () {
+              Provider.of<GetProductBloc>(context, listen: false).add(
+                PostGetAllProduct(),
+              );
+            },
+          ),
+          _filterButton(
+            "Smartphone",
+            () {
+              Provider.of<GetProductBloc>(context, listen: false).add(
+                PostGetCategoryProduct(category: "smartphones"),
+              );
+            },
+          ),
+          _filterButton(
+            "Laptop",
+            () {
+              Provider.of<GetProductBloc>(context, listen: false).add(
+                PostGetCategoryProduct(category: "laptops"),
+              );
+            },
+          ),
+          _filterButton(
+            "Cap",
+            () {
+              Provider.of<GetProductBloc>(context, listen: false).add(
+                PostGetCategoryProduct(category: "cap"),
+              );
+            },
+          ),
+          _filterButton(
+            "Skincare",
+            () {
+              Provider.of<GetProductBloc>(context, listen: false).add(
+                PostGetCategoryProduct(category: "skincare"),
+              );
+            },
+          ),
+          _filterButton(
+            "Grocery",
+            () {
+              Provider.of<GetProductBloc>(context, listen: false).add(
+                PostGetCategoryProduct(category: "groceries"),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  _filterButton(title, onTap) {
+    return Container(
+      alignment: Alignment.topLeft,
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: 100,
+            height: 30,
+            color: orangeShade300Color,
+            child: Center(
+                child: PoppinsBlack14(
+              text: title,
+            )),
           ),
         ),
       ),

@@ -2,15 +2,28 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HikaShopRepository {
-  fetchProducts() async {
+  fetchAllProducts() async {
     final response = await http.get(
       Uri.parse('https://dummyjson.com/products'),
     );
-    // List<dynamic> data = json.decode(response.body);
     return response.body;
   }
 
-  // Future<List<Product>> fetchProducts() async {
+  fetchProductByCategory(var category) async {
+    final response = await http.get(
+      Uri.parse('https://dummyjson.com/products/category/$category'),
+    );
+    return response.body;
+  }
+
+  // fetchAllCategory() async {
+  //   final response = await http.get(
+  //     Uri.parse('https://dummyjson.com/products/categories'),
+  //   );
+  //   return response.body;
+  // }
+
+  // Future<List<Product>> fetchAllProducts() async {
   //   final response =
   //       await http.get(Uri.parse('https://dummyjson.com/products'));
   //   if (response.statusCode == 200) {
