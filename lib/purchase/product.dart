@@ -19,6 +19,15 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   int stateLength = 0;
   List<Products> stateData = [];
+  int selectedFilterIndex = 0;
+  List<String> filterTitles = [
+    "All",
+    "Smartphone",
+    "Laptop",
+    "Cap",
+    "Skincare",
+    "Grocery",
+  ];
   @override
   void initState() {
     Provider.of<GetProductBloc>(context, listen: false).add(
@@ -186,60 +195,24 @@ class _ProductPageState extends State<ProductPage> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          _filterButton(
-            "All",
-            () {
-              Provider.of<GetProductBloc>(context, listen: false).add(
-                PostGetAllProduct(),
-              );
-            },
-          ),
-          _filterButton(
-            "Smartphone",
-            () {
-              Provider.of<GetProductBloc>(context, listen: false).add(
-                PostGetCategoryProduct(category: "smartphones"),
-              );
-            },
-          ),
-          _filterButton(
-            "Laptop",
-            () {
-              Provider.of<GetProductBloc>(context, listen: false).add(
-                PostGetCategoryProduct(category: "laptops"),
-              );
-            },
-          ),
-          _filterButton(
-            "Cap",
-            () {
-              Provider.of<GetProductBloc>(context, listen: false).add(
-                PostGetCategoryProduct(category: "cap"),
-              );
-            },
-          ),
-          _filterButton(
-            "Skincare",
-            () {
-              Provider.of<GetProductBloc>(context, listen: false).add(
-                PostGetCategoryProduct(category: "skincare"),
-              );
-            },
-          ),
-          _filterButton(
-            "Grocery",
-            () {
-              Provider.of<GetProductBloc>(context, listen: false).add(
-                PostGetCategoryProduct(category: "groceries"),
-              );
-            },
-          ),
+          for (int index = 0; index < filterTitles.length; index++)
+            _filterButton(
+              filterTitles[index],
+              index,
+              () {
+                setState(() {
+                  selectedFilterIndex = index;
+                });
+                _onFilterButtonTap(index);
+              },
+              selectedFilterIndex == index,
+            ),
         ],
       ),
     );
   }
 
-  _filterButton(title, onTap) {
+  _filterButton(title, int index, onTap, bool isSelected) {
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
@@ -250,15 +223,54 @@ class _ProductPageState extends State<ProductPage> {
           child: Container(
             width: 100,
             height: 30,
-            color: orangeShade300Color,
+            color: isSelected ? mainBlueColor : orangeShade300Color,
             child: Center(
-                child: PoppinsBlack14(
-              text: title,
-            )),
+                child: isSelected
+                    ? PoppinsWhite14(text: title)
+                    : PoppinsBlack14(
+                        text: title,
+                      )),
           ),
         ),
       ),
     );
+  }
+
+  _onFilterButtonTap(int index) {
+    switch (index) {
+      case 0:
+        Provider.of<GetProductBloc>(context, listen: false).add(
+          PostGetAllProduct(),
+        );
+        break;
+      case 1:
+        Provider.of<GetProductBloc>(context, listen: false).add(
+          PostGetCategoryProduct(category: "smartphones"),
+        );
+        break;
+      case 2:
+        Provider.of<GetProductBloc>(context, listen: false).add(
+          PostGetCategoryProduct(category: "laptops"),
+        );
+        break;
+      case 3:
+        Provider.of<GetProductBloc>(context, listen: false).add(
+          PostGetCategoryProduct(category: "cap"),
+        );
+        break;
+      case 4:
+        Provider.of<GetProductBloc>(context, listen: false).add(
+          PostGetCategoryProduct(category: "skincare"),
+        );
+        break;
+      case 5:
+        Provider.of<GetProductBloc>(context, listen: false).add(
+          PostGetCategoryProduct(category: "groceries"),
+        );
+        break;
+      default:
+        break;
+    }
   }
 
   _closeAlert() {
