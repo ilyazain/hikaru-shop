@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 //constant color
 const Color mainBlueColor = Color.fromARGB(255, 36, 87, 169);
 const Color whiteColor = Colors.white;
+const Color blackColor = Colors.black;
+Color greyShade400Color = Colors.grey.shade400;
 
 //constant font
 class PoppinsWhite14 extends StatelessWidget {

@@ -14,12 +14,14 @@ class ItemPage extends StatefulWidget {
   final String image;
   final String desc;
   final String price;
+  final List<String> images;
   const ItemPage(
       {super.key,
       required this.item,
       required this.image,
       required this.desc,
-      required this.price});
+      required this.price,
+      required this.images});
 
   @override
   State<ItemPage> createState() => _ItemPageState();
@@ -36,6 +38,14 @@ class _ItemPageState extends State<ItemPage> {
   //   items.remove(menuModel);
   // }
 
+  // "images": [
+  //               "https://cdn.dummyjson.com/product-images/1/1.jpg",
+  //               "https://cdn.dummyjson.com/product-images/1/2.jpg",
+  //               "https://cdn.dummyjson.com/product-images/1/3.jpg",
+  //               "https://cdn.dummyjson.com/product-images/1/4.jpg",
+  //               "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"
+  //           ]
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +59,14 @@ class _ItemPageState extends State<ItemPage> {
       body: Container(
         child: Column(
           children: [
-            Image.network(widget.image),
+            // Image.network(widget.image),
+            _slideImage(),
+            //       ListView.builder(
+            //   itemCount: product.images.length,
+            //   itemBuilder: (context, index) {
+            //     return Image.network(product.images[index]);
+            //   },
+            // );
             ListTile(
               leading: Text(widget.item),
               trailing: Text(widget.price),
@@ -159,6 +176,35 @@ class _ItemPageState extends State<ItemPage> {
           ),
         ),
       ),
+    );
+  }
+
+  _slideImage() {
+    return SizedBox(
+      height: 250,
+      width: double.infinity,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.images.length,
+        separatorBuilder: (BuildContext context, int index) {
+          // Return a SizedBox with a specified width as a separator
+          return Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              width: 5,
+              color: greyShade400Color);
+        },
+        itemBuilder: (context, index) {
+          return Image.network(widget.images[index]);
+        },
+      ),
+
+      // ListView.builder(
+      //   scrollDirection: Axis.horizontal,
+      //   itemCount: widget.images.length,
+      //   itemBuilder: (context, index) {
+      //     return Image.network(widget.images[index]);
+      //   },
+      // ),
     );
   }
 }
