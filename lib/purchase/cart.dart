@@ -136,7 +136,7 @@ class _CartPageState extends State<CartPage> {
                     ? addToHistory()
                     : Navigator.pushNamed(context, '/home');
               },
-              title: PoppinsWhite14(
+              title: TextWhite14(
                   text: cartItems.isNotEmpty ? "Confirm" : "Add Item"),
             )
           ],
@@ -146,11 +146,28 @@ class _CartPageState extends State<CartPage> {
   }
 
   _cartEmpty() {
-    return const Column(
-      children: [
-        //add image
-        PoppinsBlack14(text: "Your cart is empty. Please add item")
-      ],
+    return Container(
+      margin: EdgeInsets.all(15),
+      // height: double.infinity,
+      // color: mainBlueColor,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 30, bottom: 10, top: 120),
+            child: Image.asset(
+              "assets/shy_girl2.png",
+              height: 200,
+            ),
+          ),
+          Container(
+            // alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: const Center(
+              child: TextBlack16(text: "Your cart is empty. Please add item"),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -163,7 +180,7 @@ class _CartPageState extends State<CartPage> {
         ),
         _cartItem(),
         MainBlueButton(
-          title: const PoppinsWhite14(
+          title: const TextWhite14(
             text: "Add more item",
           ),
           onPressed: () {

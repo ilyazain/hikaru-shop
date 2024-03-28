@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     );
                   },
-                  title: const PoppinsWhite14(
+                  title: const TextWhite14(
                     text: "LOG MASUK",
                   ),
                 ),

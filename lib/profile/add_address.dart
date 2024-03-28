@@ -82,7 +82,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 },
               );
             },
-            title: PoppinsWhite14(
+            title: TextWhite14(
               text: "Confirm",
             )),
       ),

@@ -50,6 +50,7 @@ class _ProductPageState extends State<ProductPage> {
         return false;
       },
       child: Scaffold(
+        backgroundColor: mainBlueColor,
         appBar: MainAppBar(
             haveTrailing: true,
             text: "eShop",
@@ -70,12 +71,25 @@ class _ProductPageState extends State<ProductPage> {
                 builder: ((context, state) {
                   if (state is LoadingGetProduct) {
                     return Container(
-                      // color: Colors.amber,
-                      // height: MediaQuery.of(context).size.height,
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(top: 200),
-                      child: const CircularProgressIndicator(
-                          backgroundColor: mainBlueColor, color: whiteColor),
+                      padding: EdgeInsets.only(top: 180),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/shy_girl.png",
+                            height: 200,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: TextWhite16(
+                                text: "Please wait for a minute..."),
+                          ),
+
+                          // const CircularProgressIndicator(
+                          //     backgroundColor: mainBlueColor,
+                          //     color: whiteColor),
+                        ],
+                      ),
                     );
                   }
                   if (state is SuccessfulGetAllProduct) {
@@ -97,16 +111,37 @@ class _ProductPageState extends State<ProductPage> {
                       stateLength = state.output!.products!.length;
                       return _productCard(stateLength, stateData);
                     } else {
-                      return Column(
-                        children: [
-                          _allFilterButton(),
-                          Text('No products found'),
-                        ],
+                      return Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            _allFilterButton(),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 30, top: 110, bottom: 10),
+                              child: Image.asset(
+                                "assets/shy_girl2.png",
+                                height: 200,
+                              ),
+                            ),
+                            Container(
+                              // color: Colors.amber,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              child: const Center(
+                                child: TextWhite16(
+                                    text:
+                                        "No product found. Sorry for the inconvenience. Please select other filter. Thank you"),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     }
                   }
                   return Container(
-                    child: PoppinsBlack14(
+                    child: TextBlack14(
                       text: "Sorry, the server was down",
                     ),
                   );
@@ -143,8 +178,9 @@ class _ProductPageState extends State<ProductPage> {
                 },
                 child: Container(
                   // margin: EdgeInsets.all(5),
+                  // padding: EdgeInsets.symmetric(horizontal: 5),
                   width: MediaQuery.of(context).size.width / 2,
-                  height: 300,
+                  height: 285,
                   child: Card(
                     child: Column(
                       children: [
@@ -153,30 +189,37 @@ class _ProductPageState extends State<ProductPage> {
                           width: 100,
                           height: 100,
                         ),
-                        Row(
-                          children: [
-                            Flexible(
-                              flex: 3,
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  stateData[index].title.toString(),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 7,
+                                child: Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextBlackBold12(
+                                    text: stateData[index].title.toString(),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  stateData[index].price.toString(),
+                              Flexible(
+                                flex: 3,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: TextMaroon12(
+                                    text: "RM" +
+                                        stateData[index].price.toString(),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        Text(
-                          stateData[index].description.toString(),
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: TextBlack13(
+                            text: stateData[index].description.toString(),
+                          ),
                         ),
                       ],
                     ),
@@ -223,11 +266,19 @@ class _ProductPageState extends State<ProductPage> {
           child: Container(
             width: 100,
             height: 30,
-            color: isSelected ? mainBlueColor : orangeShade300Color,
+            // color: isSelected ? mainBlueColor : orangeShade300Color,
+            decoration: BoxDecoration(
+              color: isSelected ? greyShade300Color : orangeShade300Color,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                  color: isSelected
+                      ? orangeShade300Color
+                      : whiteColor), // Add border color
+            ),
             child: Center(
                 child: isSelected
-                    ? PoppinsWhite14(text: title)
-                    : PoppinsBlack14(
+                    ? TextBlack14(text: title)
+                    : TextBlack14(
                         text: title,
                       )),
           ),

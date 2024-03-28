@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:hikaru_e_shop/common_data/alert.dart';
 import 'package:hikaru_e_shop/common_data/appbar.dart';
 import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/home.dart';
 import 'package:hikaru_e_shop/profile/add_address.dart';
-import 'package:hikaru_e_shop/purchase/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddressPage extends StatefulWidget {
@@ -21,18 +20,19 @@ class _AddressPageState extends State<AddressPage> {
   bool isChecked = false;
   List<dynamic> addressItems = [];
   int selectedAddress = -1;
-  dynamic itemSelectedAddredd;
+  dynamic itemSelectedAddress;
   @override
   void initState() {
     super.initState();
-    // Retrieve cart items from SharedPreferences when the page loads
     SharedPreferences.getInstance().then(
       (prefs) {
         setState(
           () {
             addressItems = prefs
-                  .getStringList('address')
-                    ?.map((item) => json.decode(item))
+                    .getStringList('address')
+                    ?.map(
+                      (item) => json.decode(item),
+                    )
                     .toList() ??
                 [];
           },
@@ -60,68 +60,163 @@ class _AddressPageState extends State<AddressPage> {
         },
       ),
       body: Container(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: clearAddress,
-              child: Text("Clear Address"),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: addressItems.length,
-                itemBuilder: (context, index) {
-                  final item = addressItems[index];
-                  return ListTile(
-                    leading: Text(
-                        '${item['add']}, ${item['city']}, ${item['postcode']},${item['state']}'),
-                    trailing: IconButton(
-                      icon: selectedAddress == index
-                          ? Icon(Icons.check_box)
-                          : Icon(Icons.check_box_outline_blank),
-                      onPressed: () async {
-                        setState(() {
-                          selectedAddress = index;
-                          print(selectedAddress);
-                        });
-                        itemSelectedAddredd = item;
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-            MainBlueButton(
-                onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setString(
-                      'selectedaddress', json.encode(itemSelectedAddredd));
-
-                  _navigation();
-                },
-                title: PoppinsWhite14(
-                  text: "Confirm Address",
-                ))
-          ],
-        ),
-      ),
+          child: addressItems.isNotEmpty ? _haveAddress() : _addressEmpty()),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(15),
         child: MainBlueButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddAddressPage(prePage: widget.prePage),
-              ),
-            );
+            addressItems.isNotEmpty
+                ? _confirmNavigation()
+                : _addAddressNavigation();
           },
-          title: PoppinsWhite14(
-            text: "Add Address",
+          title: TextWhite14(
+            text: addressItems.isNotEmpty ? "Confirm Address" : "Add Address",
           ),
         ),
       ),
     );
+  }
+
+  _addAddressNavigation() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddAddressPage(prePage: widget.prePage),
+      ),
+    );
+  }
+
+  _haveAddress() {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: clearAddress,
+          child: Text("Clear Address"),
+        ),
+        _addressList(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: MainBlueButton(
+            onPressed: () async {
+              _addAddressNavigation();
+            },
+            title: const TextWhite14(
+              text: "Add Address",
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  _confirmNavigation() async {
+    // if (itemSelectedAddress) {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedaddress', json.encode(itemSelectedAddress));
+
+    _navigation();
+    // } else {
+    //   showDialog(
+    //     context: context,
+    //     barrierDismissible: false,
+    //     builder: (context) {
+    //       return OkAlert(
+    //         title: "Address Empty",
+    //         subtitle: "Please select address",
+    //         okOnpressed: () {
+    //           Navigator.pop(context);
+    //         },
+    //       );
+    //     },
+    //   );
+    // }
+  }
+
+  _addressEmpty() {
+    return const Column(
+      children: [
+        //add image
+        TextBlack14(text: "Your address is empty. Please add item")
+      ],
+    );
+  }
+
+  _addressList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: addressItems.length,
+        itemBuilder: (context, index) {
+          final item = addressItems[index];
+          return ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: TextBlack14(
+                  text:
+                      '${item['add']}, ${item['city']}, ${item['postcode']},${item['state']}'),
+            ),
+            trailing: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: selectedAddress == index
+                      ? const Icon(
+                          Icons.check_box,
+                          color: greenColor,
+                        )
+                      : const Icon(Icons.check_box_outline_blank),
+                  onPressed: () async {
+                    setState(() {
+                      selectedAddress = index;
+                    });
+                    itemSelectedAddress = item;
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete,
+                    color: redColor,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return YesNoAlert(
+                          title: "Delete Address?",
+                          subtitle:
+                              "Are you sure you want to delete ${item['add']}, ${item['city']}, ${item['postcode']},${item['state']} address?",
+                          yesOnpressed: () {
+                            setState(() {
+                              addressItems.removeAt(index);
+                              if (selectedAddress == index) {
+                                selectedAddress = -1;
+                                itemSelectedAddress = null;
+                              }
+                            });
+                            _updateAddressList();
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _updateAddressList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> addressJsonList =
+        addressItems.map((item) => json.encode(item)).toList();
+    prefs.setStringList('address', addressJsonList);
   }
 
   _navigation() {
@@ -136,8 +231,6 @@ class _AddressPageState extends State<AddressPage> {
           ),
         ),
       );
-    } else {
-      print("hehe");
-    }
+    } else {}
   }
 }

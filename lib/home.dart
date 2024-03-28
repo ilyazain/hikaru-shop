@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hikaru_e_shop/common_data/alert.dart';
+import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/login.dart';
 import 'package:hikaru_e_shop/profile/profile.dart';
 import 'package:hikaru_e_shop/purchase/product.dart';
@@ -66,6 +67,7 @@ class _HomePageState extends State<HomePage> {
         // child:
 
         Scaffold(
+          
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {

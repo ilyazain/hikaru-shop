@@ -42,7 +42,7 @@ class OkAlert extends StatelessWidget {
                           backgroundColor: mainBlueColor),
                       onPressed: okOnpressed,
                       child: Container(
-                        child: PoppinsWhite14(
+                        child: TextWhite14(
                           text: "OK",
                         ),
                       ),
@@ -108,7 +108,7 @@ class YesNoAlert extends StatelessWidget {
                           () {
                             Navigator.pop(context);
                           },
-                      child: PoppinsBlack14(text: leftButton ?? "No"),
+                      child: TextBlack14(text: leftButton ?? "No"),
                     ),
                   ),
                 ),
@@ -123,7 +123,7 @@ class YesNoAlert extends StatelessWidget {
                           () {
                             Navigator.pop(context);
                           },
-                      child: PoppinsWhite14(
+                      child: TextWhite14(
                         text: rightButton ?? "Yes",
                       ),
                     ),

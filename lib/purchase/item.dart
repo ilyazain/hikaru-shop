@@ -142,7 +142,7 @@ class _ItemPageState extends State<ItemPage> {
                               ),
                             );
                           },
-                          title: const PoppinsWhite14(
+                          title: const TextWhite14(
                             text: "Add To Cart",
                           ),
                         )
@@ -153,7 +153,7 @@ class _ItemPageState extends State<ItemPage> {
               },
             );
           },
-          title: const PoppinsWhite14(
+          title: const TextWhite14(
             text: "Continue",
           ),
         ),

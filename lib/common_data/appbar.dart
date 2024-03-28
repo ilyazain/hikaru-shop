@@ -50,10 +50,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         text,
         style: const TextStyle(
-            fontFamily: "Poppins",
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: Colors.white),
+            fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
       ),
     );
   }
