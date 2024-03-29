@@ -302,8 +302,6 @@ class _CartPageState extends State<CartPage> {
     List<String> cartJsonList =
         cartItems.map((item) => json.encode(item)).toList();
     prefs.setStringList('cart', cartJsonList);
-
-    // totalPrice = calculateTotalPrice();
   }
 
   _alert() {

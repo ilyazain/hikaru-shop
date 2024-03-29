@@ -152,7 +152,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 title: TextBlack14(text: itemName),
                 subtitle: TextGrey14(text: itemDateTime),
                 trailing: Container(
-                  width: 90,
+                  width: 100,
                   // color: Colors.amber,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,

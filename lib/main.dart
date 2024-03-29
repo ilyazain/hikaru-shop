@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
     '/cart': (context) => CartPage(),
     '/profile': (context) => ProfilePage(),
     '/home': (context) => HomePage(),
+     '/login': (context) => LoginPage(),
     // Other named routes...
   },
             debugShowCheckedModeBanner: false,
