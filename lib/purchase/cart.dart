@@ -154,24 +154,50 @@ class _CartPageState extends State<CartPage> {
                 trailing: _getTotalPrice()),
             MainBlueButton(
               onPressed: () {
-                // ignore: unnecessary_null_comparison
-                selectedAddress! != null
-                    ? cartItems.isNotEmpty
+                cartItems.isNotEmpty
+                    ? selectedAddress != null
                         ? addToHistory()
-                        : Navigator.pushNamed(context, '/home')
-                    : showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return OkAlert(
-                            title: "Address epmty",
-                            subtitle: "Please add or select address",
-                            okOnpressed: () {
-                              Navigator.pop(context);
+                        : showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return OkAlert(
+                                title: "Address epmty",
+                                subtitle: "Please add or select address",
+                                okOnpressed: () {
+                                  // Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddressPage(
+                                        prePage: "fromCart",
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                             },
-                          );
-                        },
-                      );
+                          )
+                    : Navigator.pushNamed(context, '/home');
+                print('hehe selectedAddress2' + selectedAddress.toString());
+                // ignore: unnecessary_null_comparison
+                // selectedAddress.toString() != null
+                //     ? cartItems.isNotEmpty
+                //         ? addToHistory()
+                //         : Navigator.pushNamed(context, '/home')
+                //     : showDialog(
+                //         context: context,
+                //         barrierDismissible: false,
+                //         builder: (context) {
+                //           return OkAlert(
+                //             title: "Address epmty",
+                //             subtitle: "Please add or select address",
+                //             okOnpressed: () {
+                //               Navigator.pop(context);
+                //             },
+                //           );
+                //         },
+                //       );
               },
               title: TextWhite14(
                   text: cartItems.isNotEmpty ? "Confirm" : "Add Item"),
