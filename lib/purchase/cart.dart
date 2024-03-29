@@ -6,6 +6,7 @@ import 'package:hikaru_e_shop/common_data/button.dart';
 import 'package:hikaru_e_shop/common_data/constant.dart';
 import 'package:hikaru_e_shop/home.dart';
 import 'package:hikaru_e_shop/profile/address.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartPage extends StatefulWidget {
@@ -71,12 +72,17 @@ class _CartPageState extends State<CartPage> {
             .toList() ??
         [];
 
+    String formattedDateTime =
+        DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
+    String address =
+        '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}';
+    print("hehe cart: " + address.toString());
     OrderDetail orderDetail = OrderDetail(
-      id: historyItems.length + 1,
-      items: cartItems,
-      totalPrice: totalPrice,
-      // dateTime: DateTime.now()
-    );
+        id: historyItems.length + 1,
+        items: cartItems,
+        totalPrice: totalPrice,
+        dateTime: formattedDateTime,
+        address: address);
     String jsonStr = jsonEncode(orderDetail);
 
     // Add cart items to history
@@ -215,7 +221,6 @@ class _CartPageState extends State<CartPage> {
               : Text('No address selected'),
           trailing: IconButton(
               onPressed: () {
-                print("object");
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -329,14 +334,15 @@ class OrderDetail {
   final int id;
   final List<dynamic> items;
   final int totalPrice;
-  // final DateTime dateTime;
+  final String dateTime;
+  final String address;
 
-  OrderDetail({
-    required this.id,
-    required this.items,
-    required this.totalPrice,
-    // required this.dateTime
-  });
+  OrderDetail(
+      {required this.id,
+      required this.items,
+      required this.totalPrice,
+      required this.dateTime,
+      required this.address});
 
   // Convert OrderDetail instance to a JSON-encodable map
   Map<String, dynamic> toJson() {
@@ -344,7 +350,8 @@ class OrderDetail {
       'id': id,
       'items': items,
       'totalPrice': totalPrice,
-      // 'dateTime': dateTime
+      'dateTime': dateTime,
+      'address': address
     };
   }
 }

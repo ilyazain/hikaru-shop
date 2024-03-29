@@ -15,28 +15,29 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   List<String> selectedHistory = [];
-  Map<String, dynamic>? selectedAddress;
+  // Map<String, dynamic>? selectedAddress;
+  // String address = "";
 
-  @override
-  void initState() {
-    super.initState();
-    _loadSelectedAddress();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _loadSelectedAddress();
+  // }
 
-  Future<void> _loadSelectedAddress() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? selectedAddressJson = prefs.getString('selectedaddress');
-    if (selectedAddressJson != null) {
-      setState(() {
-        selectedAddress = json.decode(selectedAddressJson);
-      });
-    }
-  }
+  // Future<void> _loadSelectedAddress() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? selectedAddressJson = prefs.getString('selectedaddress');
+  //   if (selectedAddressJson != null) {
+  //     setState(() {
+  //       selectedAddress = json.decode(selectedAddressJson);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greyShade400Color,
+      backgroundColor: greyShade300Color,
       appBar: MainAppBar(
           text: "Order Details",
           appBar: AppBar(),
@@ -62,35 +63,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   _address() {
     return ListTile(
-      tileColor: mainBlueColor,
-      title: TextWhite16(text: "Address"),
-      leading: Image.asset("assets/address.png"),
-      subtitle: selectedAddress != null
-          ? TextWhite14(
-              text:
-                  '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}')
-          : TextWhite14(text: 'No address selected'),
-      // trailing: IconButton(
-      //   icon: Icon(Icons.arrow_forward_ios_sharp),
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => AddressPage(
-      //           prePage: "fromProfile",
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ),
-    );
+        // tileColor: mainBlueColor,
+        title: const TextBlack14(text: "Address"),
+        leading: Image.asset("assets/address.png"),
+        subtitle: TextGrey14(text: widget.product["address"]));
   }
 
   _orderDetail() {
     return Expanded(
       child: Card(
         child: Container(
-          // margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: whiteColor,
             borderRadius: BorderRadius.circular(10),
@@ -100,6 +82,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             itemCount: widget.product["items"].length,
             itemBuilder: (context, index) {
               final item = widget.product["items"][index];
+              print("hehe: " + item['address'].toString());
               return ListTile(
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 leading: Image.network(
@@ -109,9 +92,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 title: TextBlack14(text: item['item']),
                 subtitle: TextGrey14(text: item['quantity'].toString()),
                 trailing: TextBlack14(
-                    text: ("RM " +
-                        (item['quantity'] * int.parse(item['price']))
-                            .toString())),
+                    text:
+                        ("RM ${item['quantity'] * int.parse(item['price'])}")),
               );
             },
           ),
@@ -120,23 +102,17 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  _divider() {
-    return Divider(
-      height: 2,
-    );
-  }
-
   _dateTime() {
     return Container(
-      margin: EdgeInsets.all(15),
+      margin: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: whiteColor,
+        color: orangeShade300Color,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
-          _dateTimeWidget("Date", "23/23/23"),
-          _dateTimeWidget("Time", "15:34"),
+          _dateTimeWidget("Date:", widget.product["dateTime"]),
+          // _dateTimeWidget("Time", "15:34"),
         ],
       ),
     );
@@ -145,7 +121,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   _dateTimeWidget(leading, trailing) {
     return ListTile(
       leading: TextBlack14(text: leading),
-      trailing: TextGrey14(text: trailing),
+      trailing: TextWhite14(text: trailing),
     );
   }
 }

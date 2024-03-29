@@ -43,26 +43,67 @@ class _OrdersPageState extends State<OrdersPage> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: mainBlueColor,
-        appBar: MainAppBar(
-            haveTrailing: true,
-            text: "Orders",
-            appBar: AppBar(),
-            onPressed: () {
-              Navigator.pushNamed(context, '/home');
-            }),
-        body:
+          backgroundColor: mainBlueColor,
+          appBar: MainAppBar(
+              haveTrailing: true,
+              text: "Orders",
+              appBar: AppBar(),
+              onPressed: () {
+                Navigator.pushNamed(context, '/home');
+              }),
+          body: historyItems.isNotEmpty ? _order() : _noOrder()
+          // body: Column(
+          //   children: [
+          //     ElevatedButton(
+          //       onPressed: clearHistory,
+          //       child: Text("Clear History"),
+          //     ),
+          //     historyItems.isNotEmpty ? _order() : _noOrder()
+          //   ],
+          // ),
+          ),
+    );
+  }
 
-            // Column(
-            //   children: [
-            // ElevatedButton(
-            //   onPressed: clearHistory,
-            //   child: Text("Clear History"),
-            // ),
-            _order(),
-        //   ],
-        // ),
-      ),
+  _noOrder() {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 30, bottom: 10, top: 130),
+                child: Image.asset(
+                  "assets/shy_girl2.png",
+                  height: 200,
+                ),
+              ),
+              Container(
+                // alignment: Alignment.center,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: const Center(
+                  child: TextWhite16(
+                      text: "Your history is empty. Please buy item"),
+                ),
+              ),
+            ],
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: orangeShade300Color,
+            foregroundColor: Colors.white,
+          ),
+          child: const TextWhite14(
+            text: "Buy Item",
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, '/home');
+          },
+        ),
+      ],
     );
   }
 
@@ -85,6 +126,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 product['items'].map((e) => e['item']).join(', ') ??
                     'Unknown Item';
             final itemTotalPrice = product['totalPrice'] ?? 'Unknown Item';
+            final itemDateTime = product['dateTime'] ?? 'Unknown Item';
             return GestureDetector(
               onTap: () async {
                 Navigator.push(
@@ -107,22 +149,23 @@ class _OrdersPageState extends State<OrdersPage> {
                     color: mainBlueColor,
                   ),
                 ),
-                title: Text(itemTotalPrice.toString()),
-                subtitle: Text(itemName),
+                title: TextBlack14(text: itemName),
+                subtitle: TextGrey14(text: itemDateTime),
                 trailing: Container(
                   width: 90,
                   // color: Colors.amber,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          TextBlack14(text: "RM $itemTotalPrice"),
-                          const TextGrey14(text: "data"),
-                        ],
-                      ),
+                      // Column(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   crossAxisAlignment: CrossAxisAlignment.end,
+                      //   children: [
+                      //     ,
+                      //     TextGrey14(text: itemDateTime),
+                      //   ],
+                      // ),
+                      TextBlack14(text: "RM $itemTotalPrice"),
                       Icon(Icons.arrow_forward_ios_rounded)
                     ],
                   ),

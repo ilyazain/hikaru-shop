@@ -30,95 +30,75 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: mainBlueColor,
       body: SafeArea(
-        child: Container(
-          // decoration: BoxDecoration(
-          //   image: DecorationImage(
-          //     image: AssetImage("assets/images/background.png"),
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 15),
-              //   child: TextField(
-              //     // cursorColor: greenishBlue,
-              //     obscureText: !_usernameVisible,
-              //     controller: _unameController,
-              //     decoration: const InputDecoration(
-              //       fillColor: mainBlueColor,
-              //       focusColor: mainBlueColor,
-              //       border: OutlineInputBorder(
-              //           borderSide: BorderSide(color: mainBlueColor)),
-              //       labelText: 'ID Pengguna',
-              //       // hintText: 'Masukkan ID Pengguna'
-              //     ),
-              //   ),
-              // ),
-              _textField(
-                  _unameController, !_usernameVisible, 'ID Pengguna', Text("")),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       left: 15.0, right: 15.0, top: 15, bottom: 0),
-              //   child: TextFormField(
-              //     controller: _pwdController,
-              //     obscureText: !_passwordVisible,
-              //     decoration: InputDecoration(
-              //       border: OutlineInputBorder(),
-              //       labelText: 'Kata Laluan',
-              //       suffixIcon: IconButton(
-              //         icon: Icon(
-              //           _passwordVisible
-              //               ? Icons.visibility
-              //               : Icons.visibility_off,
-              //           color: mainBlueColor,
-              //         ),
-              //         onPressed: () {
-              //           setState(() {
-              //             _passwordVisible = !_passwordVisible;
-              //           });
-              //         },
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              _textField(
-                _pwdController,
-                !_passwordVisible,
-                'Kata Laluan',
-                IconButton(
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: mainBlueColor,
-                  ),
-                  onPressed: () {
-                    setState(
-                      () {
-                        _passwordVisible = !_passwordVisible;
-                      },
-                    );
-                  },
+        child: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  "assets/login.png",
+                  height: 250,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: MainBlueButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(),
+                Container(
+                  margin: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: lightOrangeColor),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
                       ),
-                    );
-                  },
-                  title: const TextWhite14(
-                    text: "LOG MASUK",
+                      _textField(_unameController, !_usernameVisible,
+                          'ID Pengguna', Text("")),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _textField(
+                        _pwdController,
+                        !_passwordVisible,
+                        'Kata Laluan',
+                        IconButton(
+                          icon: Icon(
+                            _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: mainBlueColor,
+                          ),
+                          onPressed: () {
+                            setState(
+                              () {
+                                _passwordVisible = !_passwordVisible;
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: MainBlueButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          },
+                          title: const TextWhite14(
+                            text: "LOGIN",
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -127,8 +107,8 @@ class _LoginPageState extends State<LoginPage> {
 
   _textField(controller, obscureText, lblText, suffixIcon) {
     return Padding(
-      padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
-      child: TextFormField(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: TextField(
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
