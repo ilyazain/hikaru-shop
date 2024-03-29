@@ -47,7 +47,8 @@ class _CartPageState extends State<CartPage> {
                     )
                     .toList() ??
                 [];
-            calculateTotalPrice();
+            print('Hehe cartItems' + cartItems.toString());
+            // calculateTotalPrice();
           },
         );
       },
@@ -110,6 +111,7 @@ class _CartPageState extends State<CartPage> {
                 item['price'],
               )) +
           totalPrice;
+      print('Hehe totalPrice' + totalPrice.toString());
     }
   }
 
@@ -164,7 +166,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   _getTotalPrice() {
-    _updateCartList();
+    // _updateCartList();
     calculateTotalPrice();
     return cartItems.isNotEmpty
         ? TextBlack14(text: "RM " + totalPrice.toString())
