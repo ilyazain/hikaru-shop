@@ -47,7 +47,6 @@ class _CartPageState extends State<CartPage> {
                     )
                     .toList() ??
                 [];
-            print('Hehe cartItems' + cartItems.toString());
             // calculateTotalPrice();
           },
         );
@@ -61,7 +60,6 @@ class _CartPageState extends State<CartPage> {
     if (selectedAddressJson != null) {
       setState(() {
         selectedAddress = json.decode(selectedAddressJson);
-        print(selectedAddress);
       });
     }
   }
@@ -78,7 +76,6 @@ class _CartPageState extends State<CartPage> {
         DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
     String address =
         '${selectedAddress!['add']}, ${selectedAddress!['city']}, ${selectedAddress!['postcode']}, ${selectedAddress!['state']}';
-    print("hehe cart: " + address.toString());
     OrderDetail orderDetail = OrderDetail(
         id: historyItems.length + 1,
         items: cartItems,
@@ -113,7 +110,6 @@ class _CartPageState extends State<CartPage> {
                 item['price'],
               )) +
           totalPrice;
-      print('Hehe totalPrice' + totalPrice.toString());
     }
   }
 
@@ -179,25 +175,6 @@ class _CartPageState extends State<CartPage> {
                             },
                           )
                     : Navigator.pushNamed(context, '/home');
-                print('hehe selectedAddress2' + selectedAddress.toString());
-                // ignore: unnecessary_null_comparison
-                // selectedAddress.toString() != null
-                //     ? cartItems.isNotEmpty
-                //         ? addToHistory()
-                //         : Navigator.pushNamed(context, '/home')
-                //     : showDialog(
-                //         context: context,
-                //         barrierDismissible: false,
-                //         builder: (context) {
-                //           return OkAlert(
-                //             title: "Address epmty",
-                //             subtitle: "Please add or select address",
-                //             okOnpressed: () {
-                //               Navigator.pop(context);
-                //             },
-                //           );
-                //         },
-                //       );
               },
               title: TextWhite14(
                   text: cartItems.isNotEmpty ? "Confirm" : "Add Item"),
