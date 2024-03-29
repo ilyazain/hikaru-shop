@@ -61,6 +61,7 @@ class _CartPageState extends State<CartPage> {
     if (selectedAddressJson != null) {
       setState(() {
         selectedAddress = json.decode(selectedAddressJson);
+        print(selectedAddress);
       });
     }
   }
@@ -105,6 +106,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   void calculateTotalPrice() {
+    totalPrice = 0;
     for (var item in cartItems) {
       totalPrice = (item['quantity'] *
               int.parse(
@@ -152,9 +154,24 @@ class _CartPageState extends State<CartPage> {
                 trailing: _getTotalPrice()),
             MainBlueButton(
               onPressed: () {
-                cartItems.isNotEmpty
-                    ? addToHistory()
-                    : Navigator.pushNamed(context, '/home');
+                // ignore: unnecessary_null_comparison
+                selectedAddress! != null
+                    ? cartItems.isNotEmpty
+                        ? addToHistory()
+                        : Navigator.pushNamed(context, '/home')
+                    : showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return OkAlert(
+                            title: "Address epmty",
+                            subtitle: "Please add or select address",
+                            okOnpressed: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                      );
               },
               title: TextWhite14(
                   text: cartItems.isNotEmpty ? "Confirm" : "Add Item"),
@@ -262,39 +279,39 @@ class _CartPageState extends State<CartPage> {
                   text: ("RM " +
                       (item['quantity'] * int.parse(item['price']))
                           .toString())),
-              SizedBox(
-                width: 10,
-              )
-              // IconButton(
-              //   icon: const Icon(
-              //     Icons.delete,
-              //     color: redColor,
-              //   ),
-              //   onPressed: () {
-              //     showDialog(
-              //       context: context,
-              //       barrierDismissible: false,
-              //       builder: (context) {
-              //         return YesNoAlert(
-              //           title: "Delete item?",
-              //           subtitle:
-              //               "Are you sure you want to delete ${item['item']} in cart?",
-              //           yesOnpressed: () {
-              //             setState(() {
-              //               cartItems.removeAt(index);
-              //               if (selectedCart == index) {
-              //                 selectedCart = -1;
-              //                 itemSelectedCart = null;
-              //               }
-              //             });
-              //             _updateCartList();
-              //             Navigator.pop(context);
-              //           },
-              //         );
-              //       },
-              //     );
-              //   },
-              // ),
+              // SizedBox(
+              //   width: 10,
+              // )
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  color: redColor,
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return YesNoAlert(
+                        title: "Delete item?",
+                        subtitle:
+                            "Are you sure you want to delete ${item['item']} in cart?",
+                        yesOnpressed: () {
+                          setState(() {
+                            cartItems.removeAt(index);
+                            if (selectedCart == index) {
+                              selectedCart = -1;
+                              itemSelectedCart = null;
+                            }
+                          });
+                          _updateCartList();
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           ),
         );
