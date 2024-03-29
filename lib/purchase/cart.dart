@@ -262,36 +262,39 @@ class _CartPageState extends State<CartPage> {
                   text: ("RM " +
                       (item['quantity'] * int.parse(item['price']))
                           .toString())),
-              IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  color: redColor,
-                ),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      return YesNoAlert(
-                        title: "Delete item?",
-                        subtitle:
-                            "Are you sure you want to delete ${item['item']} in cart?",
-                        yesOnpressed: () {
-                          setState(() {
-                            cartItems.removeAt(index);
-                            if (selectedCart == index) {
-                              selectedCart = -1;
-                              itemSelectedCart = null;
-                            }
-                          });
-                          _updateCartList();
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
+              SizedBox(
+                width: 10,
+              )
+              // IconButton(
+              //   icon: const Icon(
+              //     Icons.delete,
+              //     color: redColor,
+              //   ),
+              //   onPressed: () {
+              //     showDialog(
+              //       context: context,
+              //       barrierDismissible: false,
+              //       builder: (context) {
+              //         return YesNoAlert(
+              //           title: "Delete item?",
+              //           subtitle:
+              //               "Are you sure you want to delete ${item['item']} in cart?",
+              //           yesOnpressed: () {
+              //             setState(() {
+              //               cartItems.removeAt(index);
+              //               if (selectedCart == index) {
+              //                 selectedCart = -1;
+              //                 itemSelectedCart = null;
+              //               }
+              //             });
+              //             _updateCartList();
+              //             Navigator.pop(context);
+              //           },
+              //         );
+              //       },
+              //     );
+              //   },
+              // ),
             ],
           ),
         );
